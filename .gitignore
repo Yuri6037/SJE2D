@@ -1,0 +1,12 @@
+# Binary directory
+target
+
+# IDE files
+.idea
+*.iml
+.vscode
+
+# Apple specific
+.DS_Store
+.AppleDouble
+.LSOverride

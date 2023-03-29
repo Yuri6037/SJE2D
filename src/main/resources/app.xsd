@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="minengine" xmlns="minengine"
+           attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:element name="app" type="appType"/>
+  <xs:complexType name="displayType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="title" minOccurs="0"/>
+      <xs:element type="xs:short" name="width"/>
+      <xs:element type="xs:short" name="height"/>
+      <xs:element type="xs:boolean" name="fullscreen"/>
+      <xs:element type="xs:boolean" name="vsync"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="assetsType">
+    <xs:sequence>
+      <xs:element type="registryType" name="registry"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registryType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element type="xs:string" name="protocol"/>
+      <xs:element type="xs:string" name="factory"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="bindingType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="id"/>
+      <xs:element type="xs:string" name="key"/>
+      <xs:element type="xs:string" name="modifier" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bindingsType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element type="bindingType" name="binding"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="axisType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="id"/>
+      <xs:element type="xs:string" name="key"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="axesType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element type="axisType" name="axis"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="inputType">
+    <xs:sequence>
+      <xs:element type="xs:boolean" name="use-mouse"/>
+      <xs:element type="xs:boolean" name="use-keyboard"/>
+      <xs:element type="xs:boolean" name="use-joystick"/>
+      <xs:element type="bindingsType" name="bindings"/>
+      <xs:element type="axesType" name="axes"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="appType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="name"/>
+      <xs:element type="xs:string" name="version"/>
+      <xs:element type="xs:float" name="speed" minOccurs="0"/>
+      <xs:element type="displayType" name="display"/>
+      <xs:element type="inputType" name="input"/>
+      <xs:element type="assetsType" name="assets"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

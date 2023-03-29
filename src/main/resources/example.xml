@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="minengine"
+     xsi:schemaLocation="minengine file:///Users/yuri/Projects/BrickBroken/MiniEngine/src/main/resources/app.xsd">
+    <name>Example App</name>
+    <version>0.0.1</version>
+    <display>
+        <width>1600</width>
+        <height>900</height>
+        <fullscreen>false</fullscreen>
+        <vsync>true</vsync>
+    </display>
+    <input>
+        <use-mouse>true</use-mouse>
+        <use-keyboard>true</use-keyboard>
+        <use-joystick>false</use-joystick>
+        <bindings>
+            <binding>
+                <id>quit</id>
+                <key>ESCAPE</key>
+                <modifier>MENU</modifier>
+            </binding>
+        </bindings>
+        <axes>
+            <axis>
+                <id>cursor</id>
+                <key>MOUSE</key>
+            </axis>
+        </axes>
+    </input>
+    <assets>
+        <registry>
+            <factory>com.github.yuri6037.sje2d.test.asset.TestLoader.Factory</factory>
+            <protocol>com.github.yuri6037.sje2d.test.asset.TestProtocol</protocol>
+        </registry>
+    </assets>
+</app>
