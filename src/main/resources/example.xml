@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="minengine"
-     xsi:schemaLocation="minengine file:///Users/yuri/Projects/BrickBroken/MiniEngine/src/main/resources/app.xsd">
+<app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
+     xsi:schemaLocation="sje2d https://github.com/Yuri6037/SJE2D/blob/main/src/main/resources/app.xsd">
     <name>Example App</name>
     <version>0.0.1</version>
     <display>
