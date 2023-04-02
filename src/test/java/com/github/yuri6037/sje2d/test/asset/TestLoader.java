@@ -31,21 +31,23 @@ package com.github.yuri6037.sje2d.test.asset;
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
-import com.github.yuri6037.sje2d.asset.engine.system.*;
+import com.github.yuri6037.sje2d.asset.engine.system.IAssetFactory;
+import com.github.yuri6037.sje2d.asset.engine.system.IAssetLoader;
+import com.github.yuri6037.sje2d.asset.engine.system.ITAssetLoader;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
 /**
- * An com.github.yuri6037.minengine.test.asset loader for UT.
+ * An asset loader for UT.
  * URL Parameters:
  *      - dep: the virtual path of an optional dependency.
  *      - sleep: the sleep delay before and after checking the dependency in milliseconds.
  *      - vpath: the virtual path of the com.github.yuri6037.minengine.test.asset once loaded.
  *      - uthrow: false if the asset should not throw when unloading.
  */
-public class TestLoader implements ITAssetLoader<Test> {
-    public static class Factory implements IAssetFactory {
+public final class TestLoader implements ITAssetLoader<Test> {
+    public static final class Factory implements IAssetFactory {
         @Override
-        public IAssetLoader create(IAssetStream stream, AssetURL url) {
+        public IAssetLoader create(final IAssetStream stream, final AssetURL url) {
             return new TestLoader(url);
         }
 
@@ -58,25 +60,27 @@ public class TestLoader implements ITAssetLoader<Test> {
     private final AssetURL url;
     private boolean shouldThrow = true;
 
-    private TestLoader(AssetURL url) {
+    private TestLoader(final AssetURL url) {
         this.url = url;
     }
 
     @Override
-    public Result load(AssetDepMap dependencies) throws Exception {
+    public Result load(final AssetDepMap dependencies) throws Exception {
         String dep = url.getParameter("dep");
         String sleepstr = url.getParameter("sleep");
         String uthrow = url.getParameter("uthrow");
-        if (uthrow != null && uthrow.equals("false"))
+        if (uthrow != null && uthrow.equals("false")) {
             shouldThrow = false;
+        }
         int sleep = Integer.parseInt(sleepstr == null ? "0" : sleepstr);
         if (sleep > 0) {
             Thread.sleep(sleep);
         }
         if (dep != null) {
             Test test = dependencies.get(Test.class, dep);
-            if (test == null)
+            if (test == null) {
                 return Result.needsDependencies(new String[]{dep});
+            }
         }
         if (sleep > 0) {
             Thread.sleep(sleep);

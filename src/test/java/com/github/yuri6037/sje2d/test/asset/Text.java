@@ -30,7 +30,7 @@ package com.github.yuri6037.sje2d.test.asset;
 
 import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 
-public class Text implements IAsset {
+public final class Text implements IAsset {
     @Override
     public void unload() {
     }

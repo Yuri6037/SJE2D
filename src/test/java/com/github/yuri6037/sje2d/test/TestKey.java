@@ -33,6 +33,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestKey {
+    /**
+     * A basic test to ensure the Key API works.
+     */
     @Test
     public void basic() {
         Assert.assertEquals(Key.ESCAPE, Key.fromString("ESCAPE"));

@@ -34,7 +34,11 @@ import com.github.yuri6037.sje2d.test.asset.Text;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestAssetsBasic extends TestAssetsBase {
+public final class TestAssetsBasic extends TestAssetsBase {
+    /**
+     * Creates a new UT module for the asset system.
+     * @throws Exception if the setup function failed.
+     */
     public TestAssetsBasic() throws Exception {
         super();
     }
@@ -45,12 +49,18 @@ public class TestAssetsBasic extends TestAssetsBase {
         manager.waitAll();
     }
 
+    /**
+     * Test that the asset is properly loaded and that it exists.
+     */
     @Test
     public void load() {
         Assert.assertEquals(0, proxy.getOperationCount());
         Assert.assertNotNull(proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic"));
     }
 
+    /**
+     * Simple unload test with no dependency/dependent involved.
+     */
     @Test
     public void unload() {
         Assert.assertFalse(proxy.isInUse("basic"));
@@ -61,12 +71,17 @@ public class TestAssetsBasic extends TestAssetsBase {
         Assert.assertNull(proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic"));
     }
 
+    /**
+     * Test that unloading an asset is forbidden when that particular asset is currently in use.
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unloadForbid() throws Exception {
         Assert.assertFalse(proxy.isInUse("basic"));
         Assert.assertEquals(1, proxy.getAssetsCount());
-        AssetStore<com.github.yuri6037.sje2d.test.asset.Test>.Ref ref = proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic");
-        Assert.assertEquals("this is a test", ref.get().path);
+        AssetStore<com.github.yuri6037.sje2d.test.asset.Test>.Ref ref
+                = proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic");
+        Assert.assertEquals("this is a test", ref.get().getPath());
         Assert.assertTrue(proxy.isInUse("basic"));
         Assert.assertEquals(1, proxy.unload("basic"));
         manager.waitAll();
@@ -75,6 +90,10 @@ public class TestAssetsBasic extends TestAssetsBase {
         Assert.assertNotNull(proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic"));
     }
 
+    /**
+     * Test that the asset proxy is type safe
+     * (ie. asset types are checked and do not throw exceptions when types don't match).
+     */
     @Test
     public void typeSafety() {
         Assert.assertNotNull(proxy.get(com.github.yuri6037.sje2d.test.asset.Test.class, "basic"));

@@ -32,7 +32,11 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestAssetsDep extends TestAssetsBase {
+public final class TestAssetsDep extends TestAssetsBase {
+    /**
+     * Creates a new UT module for the asset system.
+     * @throws Exception if the setup function failed.
+     */
     public TestAssetsDep() throws Exception {
         super();
     }
@@ -41,6 +45,11 @@ public class TestAssetsDep extends TestAssetsBase {
     protected void setup() {
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when assets are added in inverse order of dependency
+     * (ie. from the fewest deps to the largest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void ordered() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic"));
@@ -51,6 +60,11 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(2, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when assets are added in order of dependency
+     * (ie. from the largest deps to the fewest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unordered() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic1&dep=basic"));
@@ -59,6 +73,11 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(2, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when more assets than available threads (4) are added in
+     * inverse order of dependency (ie. from the fewest deps to the largest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void orderedOverload() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic"));
@@ -70,6 +89,11 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(5, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when more assets than available threads (4) are added in
+     * order of dependency (ie. from the largest deps to the fewest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unorderedOverload() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic1&dep=basic"));
@@ -81,15 +105,26 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(5, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when 100 (99 dependents + 1 dependency) assets are added in
+     * order of dependency (ie. from the largest deps to the fewest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unorderedOverload2() throws Exception {
-        for (int i = 1; i != 100; ++i)
+        for (int i = 1; i != 100; ++i) {
             proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic" + i + "&dep=basic"));
+        }
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic"));
         manager.waitAll();
         Assert.assertEquals(100, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if asset dependencies are correctly solved when assets are added and synced in order of dependency
+     * (ie. from the largest deps to the fewest deps).
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unordered2() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic1&dep=basic"));
@@ -99,6 +134,10 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(2, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if assets are correctly unloaded when the dependent is unloaded before the dependency.
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void orderedUnload() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic"));
@@ -114,6 +153,11 @@ public class TestAssetsDep extends TestAssetsBase {
         Assert.assertEquals(0, proxy.getAssetsCount());
     }
 
+    /**
+     * Test if assets are correctly unloaded when the dependency is unloaded first, automatically taking the
+     * dependent with it.
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void unorderedUnload() throws Exception {
         proxy.queue(new AssetURL("test/test", "test", "this is a test?name=basic&uthrow=false"));

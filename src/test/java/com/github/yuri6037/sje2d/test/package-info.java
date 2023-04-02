@@ -26,51 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * Uni tests module.
+ */
 package com.github.yuri6037.sje2d.test;
-
-import com.github.yuri6037.sje2d.asset.config.TypeRegistry;
-import com.github.yuri6037.sje2d.asset.engine.manager.AssetManager;
-import com.github.yuri6037.sje2d.asset.engine.manager.AssetManagerProxy;
-import com.github.yuri6037.sje2d.test.asset.TestLoader;
-import com.github.yuri6037.sje2d.test.asset.TestProtocol;
-
-public abstract class TestAssetsBase {
-    //CHECKSTYLE OFF: VisibilityModifier
-    /**
-     * A reference to the UT assets manager.
-     */
-    protected final AssetManager manager;
-
-    /**
-     * A reference to the UT assets manager proxy.
-     */
-    protected final AssetManagerProxy proxy;
-    //CHECKSTYLE ON
-
-    /**
-     * Creates a new UT module for the asset system.
-     * @throws Exception if the setup function failed.
-     */
-    public TestAssetsBase() throws Exception {
-        TypeRegistry registry = getRegistryBuilder().build();
-        manager = new AssetManager(registry);
-        proxy = manager.newProxy();
-        setup();
-    }
-
-    /**
-     * Creates the registry builder. Override this method to customize the asset registry.
-     * @return the new registry builder.
-     */
-    protected TypeRegistry.Builder getRegistryBuilder() {
-        return new TypeRegistry.Builder()
-                .addFactory(new TestLoader.Factory())
-                .addProtocol(new TestProtocol("test/test"));
-    }
-
-    /**
-     * Function called when initializing the UT module. Add initial assets to load in here.
-     * @throws Exception if the initialization of the UT module failed.
-     */
-    protected abstract void setup() throws Exception;
-}

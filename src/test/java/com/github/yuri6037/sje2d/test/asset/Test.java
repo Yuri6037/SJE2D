@@ -31,20 +31,33 @@ package com.github.yuri6037.sje2d.test.asset;
 import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 
 /**
- * A test com.github.yuri6037.minengine.test.asset for UT.
+ * A test asset for UT.
  */
-public class Test implements IAsset {
-    public final String path;
+public final class Test implements IAsset {
+    private final String path;
     private final boolean shouldThrow;
 
-    public Test(final String path, boolean shouldThrow) {
+    /**
+     * Creates a new instance of a Test asset.
+     * @param path the path of the test asset.
+     * @param shouldThrow whether to throw an exception on unload or not.
+     */
+    public Test(final String path, final boolean shouldThrow) {
         this.path = path;
         this.shouldThrow = shouldThrow;
     }
 
+    /**
+     * @return the path of the test asset.
+     */
+    public String getPath() {
+        return path;
+    }
+
     @Override
     public void unload() {
-        if (shouldThrow)
+        if (shouldThrow) {
             throw new RuntimeException("The test asset was unloaded");
+        }
     }
 }

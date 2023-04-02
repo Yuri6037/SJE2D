@@ -33,13 +33,16 @@ import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.AssetInputStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-public class TestProtocol implements IAssetProtocol {
+public final class TestProtocol implements IAssetProtocol {
     private final String mimeType;
 
-    public TestProtocol(String mimeType) {
+    /**
+     * Creates a new instance of the test protocol.
+     * @param mimeType the mime-type to return to automatic inference.
+     */
+    public TestProtocol(final String mimeType) {
         this.mimeType = mimeType;
     }
 
@@ -49,7 +52,7 @@ public class TestProtocol implements IAssetProtocol {
     }
 
     @Override
-    public IAssetStream open(AssetURL url) {
+    public IAssetStream open(final AssetURL url) {
         return new AssetInputStream(InputStream.nullInputStream()) {
             @Override
             public String getMimeType() {

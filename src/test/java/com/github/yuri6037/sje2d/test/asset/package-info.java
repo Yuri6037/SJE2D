@@ -26,34 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.test;
-
-import com.github.yuri6037.sje2d.window.WindowException;
-import org.junit.Test;
-
-public class TestWindow {
-
-    /**
-     * Basic window test.
-     * @throws WindowException if the window couldn't be created.
-     */
-    @Test
-    public void basic() throws WindowException {
-        /*Window window = new Window(1024, 768, "Test window");
-        Render render = new Render();
-        render.setTransformCenter(new Point(.4f, .4f));
-        float width = window.getWidth() / 2.0f;
-        float height = window.getHeight() / 2.0f;
-        Point pos = new Point(width - width / 2.0f, height - height / 2.0f);
-        int rotation = 0;
-        window.setVsync(true);
-        while (!window.shouldClose()) {
-            render.setColor(Color.RED);
-            render.setRotation(rotation);
-            render.drawRect(pos.x, pos.y, width, height);
-            window.update();
-            rotation += 1 % 360;
-        }
-        window.close();*/
-    }
-}
+/**
+ * This module contains tests assets to use in UT.
+ */
+package com.github.yuri6037.sje2d.test.asset;

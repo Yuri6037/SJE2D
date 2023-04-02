@@ -35,6 +35,10 @@ import org.junit.Test;
 import java.net.MalformedURLException;
 
 public class TestAssetURL {
+    /**
+     * Test that AssetURL can represent basic HTTP links.
+     * @throws MalformedURLException if the test failed.
+     */
     @Test
     public void basicHttp() throws MalformedURLException {
         AssetURL url = new AssetURL("https://github.com");
@@ -44,6 +48,10 @@ public class TestAssetURL {
         Assert.assertNull(url.getParameter("test"));
     }
 
+    /**
+     * Test that AssetURL can represent basic local file links.
+     * @throws MalformedURLException if the test failed.
+     */
     @Test
     public void basicFile() throws MalformedURLException {
         AssetURL url = new AssetURL("file:///etc/file.txt");
@@ -53,6 +61,10 @@ public class TestAssetURL {
         Assert.assertNull(url.getParameter("test"));
     }
 
+    /**
+     * Test that AssetURL can represent basic local file links with query parameters.
+     * @throws MalformedURLException if the test failed.
+     */
     @Test
     public void paramsFile() throws MalformedURLException {
         AssetURL url = new AssetURL("file:///etc/file.txt?name=name1");
@@ -62,6 +74,10 @@ public class TestAssetURL {
         Assert.assertEquals("name1", url.getParameter("name"));
     }
 
+    /**
+     * Test that AssetURL can represent basic local file links with query parameters and a custom pre-pended mime-type.
+     * @throws MalformedURLException if the test failed.
+     */
     @Test
     public void mimeTypeFile() throws MalformedURLException {
         AssetURL url = new AssetURL("config/text file:///etc/file.txt?name=name1");
@@ -71,6 +87,10 @@ public class TestAssetURL {
         Assert.assertEquals("name1", url.getParameter("name"));
     }
 
+    /**
+     * Test that AssetURL can represent a path with spaces with no URL formatting.
+     * @throws MalformedURLException if the test failed.
+     */
     @Test
     public void withSpaces() throws MalformedURLException {
         AssetURL url = new AssetURL("test://this is a test?name=basic");

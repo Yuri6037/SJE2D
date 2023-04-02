@@ -33,6 +33,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestAssetsURL extends TestAssetsBase {
+    /**
+     * Creates a new UT module for the asset system.
+     * @throws Exception if the setup function failed.
+     */
     public TestAssetsURL() throws Exception {
     }
 
@@ -40,6 +44,10 @@ public class TestAssetsURL extends TestAssetsBase {
     protected void setup() {
     }
 
+    /**
+     * Test that it is possible to load an asset by inferring its mime-type.
+     * @throws Exception if some assets manager operation failed.
+     */
     @Test
     public void compactURL() throws Exception {
         proxy.queue(new AssetURL("test://this is a test?name=basic"));
