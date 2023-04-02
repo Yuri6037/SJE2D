@@ -30,7 +30,7 @@ package com.github.yuri6037.sje2d.asset.protocol;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

@@ -28,34 +28,21 @@
 
 package com.github.yuri6037.sje2d.asset.protocol;
 
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.AssetInputStream;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-public final class BasicAssetStream implements IAssetStream {
-    private final InputStream stream;
-
+public final class BasicAssetStream extends AssetInputStream {
     /**
      * Creates a new BasicAssetStream from an InputStream.
      * @param stream the input stream.
      */
     public BasicAssetStream(final InputStream stream) {
-        this.stream = stream;
+        super(stream);
     }
 
     @Override
     public String getMimeType() {
         return null;
-    }
-
-    @Override
-    public InputStream getInputStream() {
-        return stream;
-    }
-
-    @Override
-    public void close() throws IOException {
-        stream.close();
     }
 }

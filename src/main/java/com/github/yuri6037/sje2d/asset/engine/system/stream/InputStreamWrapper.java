@@ -26,21 +26,35 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.protocol;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-public abstract class WebRequestProtocol implements IAssetProtocol {
-    @Override
-    public final boolean canProvideMimeType() {
-        return true;
+public final class InputStreamWrapper extends InputStream {
+    private final IAssetStream stream;
+
+    InputStreamWrapper(final IAssetStream stream) {
+        this.stream = stream;
     }
 
     @Override
-    public final IAssetStream open(final AssetURL url) throws Exception {
+    public int read() throws IOException {
+        return stream.read();
+    }
 
-        return null;
+    @Override
+    public int read(final byte[] b) throws IOException {
+        return stream.read(b);
+    }
+
+    @Override
+    public int read(final byte[] b, final int off, final int len) throws IOException {
+        return stream.read(b, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        stream.close();
     }
 }

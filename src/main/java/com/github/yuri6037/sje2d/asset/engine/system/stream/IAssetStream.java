@@ -26,21 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.protocol;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
-
-public abstract class WebRequestProtocol implements IAssetProtocol {
-    @Override
-    public final boolean canProvideMimeType() {
-        return true;
-    }
-
-    @Override
-    public final IAssetStream open(final AssetURL url) throws Exception {
-
-        return null;
-    }
+public interface IAssetStream extends IInputStream {
+    /**
+     * Gets the mime-type of the asset which is being loaded.
+     * This function is only called if the URL of the asset does not have an explicit mime-type specified to let
+     * a chance to the protocol to provide one.
+     * @return null if no mime-type can be found for the given URL or.
+     */
+    String getMimeType();
 }

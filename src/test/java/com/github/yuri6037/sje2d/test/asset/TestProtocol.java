@@ -29,9 +29,11 @@
 package com.github.yuri6037.sje2d.test.asset;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.AssetInputStream;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public class TestProtocol implements IAssetProtocol {
@@ -48,19 +50,10 @@ public class TestProtocol implements IAssetProtocol {
 
     @Override
     public IAssetStream open(AssetURL url) {
-        return new IAssetStream() {
+        return new AssetInputStream(InputStream.nullInputStream()) {
             @Override
             public String getMimeType() {
                 return mimeType;
-            }
-
-            @Override
-            public InputStream getInputStream() {
-                return null;
-            }
-
-            @Override
-            public void close() {
             }
         };
     }

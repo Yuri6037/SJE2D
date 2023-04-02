@@ -35,11 +35,12 @@ import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetFactory;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetLoader;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.ITypeRegistry;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -96,62 +97,51 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
             return false;
         }
         LOGGER.debug("Using protocol {}", protocol.getClass().getName());
-        if (url.getMimeType() != null) {
-            IAssetFactory factory = getFactory(url);
-            if (factory == null) {
-                LOGGER.error("Unknown asset mime-type '{}'", url.getMimeType());
+        IAssetStream stream = null;
+        try {
+            stream = protocol.open(url);
+            if (stream == null) {
+                LOGGER.error("The protocol does not support the given URL");
                 return false;
             }
-            LOGGER.debug("Using factory {}", factory.getClass().getName());
-            try {
-                loader = factory.create(protocol, url);
-                if (loader == null) {
-                    IAssetStream stream = protocol.open(url);
-                    loader = factory.create(stream, url);
-                    if (loader == null) {
-                        stream.close();
-                    }
-                }
-                if (loader == null) {
-                    LOGGER.error("Unsupported create operation in factory '{}'", factory.getClass().getName());
+            IAssetFactory factory;
+            if (url.getMimeType() == null) {
+                if (!protocol.canProvideMimeType()) {
+                    LOGGER.error("The protocol '{}' does not support asset mime-type inference", url.getProtocol());
                     return false;
                 }
-            } catch (Exception e) {
-                LOGGER.error("Failed to create asset", e);
-                return false;
-            }
-        } else {
-            if (!protocol.canProvideMimeType()) {
-                LOGGER.error("The protocol '{}' does not support asset mime-type inference", url.getProtocol());
-                return false;
-            }
-            try {
-                IAssetStream stream = protocol.open(url);
                 String mimeType = stream.getMimeType();
                 if (mimeType == null) {
                     LOGGER.error("Failed to infer mime-type for url '{}'", url);
                     return false;
                 }
                 url = url.withMimeType(mimeType);
-                IAssetFactory factory = getFactory(url);
-                if (factory == null) {
-                    LOGGER.error("Unknown asset mime-type '{}'", url.getMimeType());
-                    return false;
-                }
-                LOGGER.debug("Using factory {}", factory.getClass().getName());
-                loader = factory.create(stream, url);
-                if (loader == null) {
-                    LOGGER.error("Unsupported create operation in factory '{}'", factory.getClass().getName());
-                    stream.close();
-                    return false;
-                }
-            } catch (Exception e) {
-                LOGGER.error("Failed to create asset", e);
+            }
+            factory = getFactory(url);
+            if (factory == null) {
+                LOGGER.error("Unknown asset mime-type '{}'", url.getMimeType());
                 return false;
             }
+            LOGGER.debug("Using factory {}", factory.getClass().getName());
+            loader = factory.create(stream, url);
+            if (loader == null) {
+                LOGGER.error("Unsupported create operation in factory '{}'", factory.getClass().getName());
+                return false;
+            }
+            LOGGER.debug("Using loader {}", loader.getClass().getName());
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("Failed to create and/or initialize an asset loader", e);
+            return false;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    LOGGER.warn("Failed to close asset stream", e);
+                }
+            }
         }
-        LOGGER.debug("Using loader {}", loader.getClass().getName());
-        return true;
     }
 
     private void step() throws Exception {

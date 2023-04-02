@@ -32,6 +32,7 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.asset.engine.system.*;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
 /**
  * An com.github.yuri6037.minengine.test.asset loader for UT.
@@ -43,11 +44,6 @@ import com.github.yuri6037.sje2d.asset.engine.system.*;
  */
 public class TestLoader implements ITAssetLoader<Test> {
     public static class Factory implements IAssetFactory {
-        @Override
-        public IAssetLoader create(IAssetProtocol protocol, AssetURL url) {
-            return new TestLoader(url);
-        }
-
         @Override
         public IAssetLoader create(IAssetStream stream, AssetURL url) {
             return new TestLoader(url);

@@ -29,6 +29,7 @@
 package com.github.yuri6037.sje2d.asset.engine.system;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
 public interface IAssetProtocol {
     /**
@@ -40,7 +41,7 @@ public interface IAssetProtocol {
     /**
      * Opens an asset URL.
      * @param url the URL to open.
-     * @return a new IAssetStream.
+     * @return a new instance of an AssetStream or a new instance of a SeekableAssetStream.
      * @throws Exception if an error has occurred while opening the stream.
      */
     IAssetStream open(AssetURL url) throws Exception;

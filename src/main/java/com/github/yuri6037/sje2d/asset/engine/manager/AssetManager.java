@@ -123,7 +123,6 @@ public class AssetManager {
     }
 
     private boolean unload(final String vpath) {
-        opCount.addAndGet(-1);
         if (isLocked(vpath)) {
             LOGGER.error("Failed to unload '{}': asset is locked", vpath);
             return false;
@@ -142,7 +141,6 @@ public class AssetManager {
     }
 
     private void unloadNamespace(final String namespace) {
-        opCount.addAndGet(-1);
         List<String> assets = getAllAssetsInNamespace(namespace);
         for (String vpath: assets) {
             if (isLocked(vpath)) {
@@ -210,7 +208,6 @@ public class AssetManager {
             try {
                 AssetLoadTask.Result res = schedulerOutChannel.take();
                 mountAsset(res);
-                opCount.addAndGet(-1);
             } catch (Exception e) {
                 LOGGER.error("Failed to mount asset", e);
             }
@@ -222,6 +219,7 @@ public class AssetManager {
                 case Unload -> unload((String) cmd.arg());
                 case Queue -> queue((AssetURL) cmd.arg());
             }
+            opCount.addAndGet(-1);
         }
     }
 

@@ -26,21 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.protocol;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
+import java.io.IOException;
 
-public abstract class WebRequestProtocol implements IAssetProtocol {
-    @Override
-    public final boolean canProvideMimeType() {
-        return true;
-    }
-
-    @Override
-    public final IAssetStream open(final AssetURL url) throws Exception {
-
-        return null;
-    }
+public interface ISeekableAssetStream extends IAssetStream {
+    /**
+     * Seeks this asset stream to a different position.
+     * @param position the new position to seek to.
+     */
+    void seek(long position) throws IOException;
 }

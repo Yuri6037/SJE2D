@@ -29,20 +29,12 @@
 package com.github.yuri6037.sje2d.asset.engine.system;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
 public interface IAssetFactory {
     /**
-     * Creates a new IAssetLoader from a protocol and an AssetURL.
-     * @param protocol the IProtocol associated to the AssetURL.
-     * @param url the AssetURL.
-     * @return a new IAssetLoader or null if this factory does not support creating from an IProtocol.
-     * @throws Exception if an error has occurred while initializing the asset loader.
-     */
-    IAssetLoader create(IAssetProtocol protocol, AssetURL url) throws Exception;
-
-    /**
      * Creates a new IAssetLoader from an asset stream and an AssetURL.
-     * @param stream the stream to load from.
+     * @param stream an instance of an asset stream.
      * @param url the AssetURL.
      * @return a new IAssetLoader or null if this factory does not support creating from an IAssetStream.
      * @throws Exception if an error has occurred while initializing the asset loader.

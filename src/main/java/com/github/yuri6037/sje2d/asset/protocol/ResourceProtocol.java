@@ -30,8 +30,8 @@ package com.github.yuri6037.sje2d.asset.protocol;
 
 import com.github.yuri6037.sje2d.Application;
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

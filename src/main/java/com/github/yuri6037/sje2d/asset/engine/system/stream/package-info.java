@@ -26,21 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.protocol;
-
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
-
-public abstract class WebRequestProtocol implements IAssetProtocol {
-    @Override
-    public final boolean canProvideMimeType() {
-        return true;
-    }
-
-    @Override
-    public final IAssetStream open(final AssetURL url) throws Exception {
-
-        return null;
-    }
-}
+/**
+ * This module contains asset stream types.
+ */
+package com.github.yuri6037.sje2d.asset.engine.system.stream;

@@ -26,16 +26,36 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.factory;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetFactory;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetLoader;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
+import java.io.Closeable;
+import java.io.IOException;
 
-public abstract class BaseFactory implements IAssetFactory {
-    @Override
-    public final IAssetLoader create(final IAssetProtocol protocol, final AssetURL url) throws Exception {
-        return create(protocol.open(url), url);
-    }
+public interface IInputStream extends Closeable {
+    /**
+     * Reads a single byte of data from the stream.
+     * @return an unsigned byte value [0;255]
+     * @throws IOException if the read operation failed.
+     */
+    int read() throws IOException;
+
+    /**
+     * Reads a buffer of bytes from the stream.
+     * @param buffer the destination buffer to read into.
+     * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if the read operation failed.
+     */
+    int read(byte[] buffer) throws IOException;
+
+    /**
+     * Reads a buffer of bytes from the stream.
+     * @param buffer the destination buffer to read into.
+     * @param off the offset in the destination buffer.
+     * @param len the number of bytes to read from the stream.
+     * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if the read operation failed.
+     */
+    int read(byte[] buffer, int off, int len) throws IOException;
 }

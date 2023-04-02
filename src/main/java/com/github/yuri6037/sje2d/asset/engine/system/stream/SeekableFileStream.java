@@ -26,21 +26,52 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.protocol;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
-public abstract class WebRequestProtocol implements IAssetProtocol {
-    @Override
-    public final boolean canProvideMimeType() {
-        return true;
+public final class SeekableFileStream implements IAssetStream, ISeekableAssetStream {
+    private final RandomAccessFile stream;
+
+    /**
+     * Creates a new SeekableFileStream.
+     * @param file the file to open.
+     * @throws FileNotFoundException if the file could not be found.
+     */
+    public SeekableFileStream(final File file) throws FileNotFoundException {
+        stream = new RandomAccessFile(file, "r");
     }
 
     @Override
-    public final IAssetStream open(final AssetURL url) throws Exception {
-
+    public String getMimeType() {
         return null;
+    }
+
+    @Override
+    public void seek(final long position) throws IOException {
+        stream.seek(position);
+    }
+
+    @Override
+    public int read() throws IOException {
+        return stream.read();
+    }
+
+    @Override
+    public int read(final byte[] buffer) throws IOException {
+        return stream.read(buffer);
+    }
+
+    @Override
+    public int read(final byte[] buffer, final int off, final int len) throws IOException {
+        return stream.read(buffer, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        stream.close();
     }
 }

@@ -29,10 +29,11 @@
 package com.github.yuri6037.sje2d.asset.factory;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
+import com.github.yuri6037.sje2d.asset.engine.system.IAssetFactory;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetLoader;
-import com.github.yuri6037.sje2d.asset.engine.system.IAssetStream;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
-public final class ImageTextureFactory extends BaseFactory {
+public final class ImageTextureFactory implements IAssetFactory {
     @Override
     public IAssetLoader create(final IAssetStream stream, final AssetURL url) throws Exception {
         return new ImageTextureLoader(url, stream);

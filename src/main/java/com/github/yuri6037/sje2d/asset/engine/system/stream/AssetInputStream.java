@@ -26,23 +26,60 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.engine.system;
+package com.github.yuri6037.sje2d.asset.engine.system.stream;
 
-import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 
-public interface IAssetStream extends Closeable {
-    /**
-     * Gets the mime-type of the asset which is being loaded.
-     * This function is only called if the URL of the asset does not have an explicit mime-type specified to let
-     * a chance to the protocol to provide one.
-     * @return null if no mime-type can be found for the given URL or.
-     */
-    String getMimeType();
+public abstract class AssetInputStream implements IAssetStream {
+    private final InputStream stream;
+
+    private static final AssetInputStream NULL_STREAM = new AssetInputStream(InputStream.nullInputStream()) {
+        @Override
+        public String getMimeType() {
+            return null;
+        }
+    };
 
     /**
-     * Gets the input stream of the asset to load.
-     * @return the asset input stream to read from.
+     * @return a null AssetInputStream which can be used in tests.
      */
-    InputStream getInputStream();
+    public static AssetInputStream nullStream() {
+        return NULL_STREAM;
+    }
+
+    /**
+     * Creates a new BaseInputStream from an existing InputStream.
+     * @param stream the InputStream to wrap.
+     */
+    public AssetInputStream(final InputStream stream) {
+        this.stream = stream;
+    }
+
+    /**
+     * @return the underlying input stream.
+     */
+    public InputStream getStream() {
+        return stream;
+    }
+
+    @Override
+    public final int read() throws IOException {
+        return stream.read();
+    }
+
+    @Override
+    public final void close() throws IOException {
+        stream.close();
+    }
+
+    @Override
+    public final int read(final byte[] buffer) throws IOException {
+        return stream.read(buffer);
+    }
+
+    @Override
+    public final int read(final byte[] buffer, final int off, final int len) throws IOException {
+        return stream.read(buffer, off, len);
+    }
 }
