@@ -32,15 +32,45 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.system.IAssetProtocol;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
+
 public abstract class WebRequestProtocol implements IAssetProtocol {
+    private static final Map<String, String> CONTENT_TYPE_MAP = Map.of(
+            "image/png", "texture/png",
+            "image/jpeg", "texture/jpeg",
+            "image/jpg", "texture/jpeg",
+            "text/x-lua", "script/lua",
+            "text/x-glsl", "shader/glsl"
+    );
+
     @Override
     public final boolean canProvideMimeType() {
         return true;
     }
 
+    private String attemptInferMimeType(final String contentType) {
+        if (contentType == null) {
+            return null;
+        }
+        String mimeType = CONTENT_TYPE_MAP.get(contentType);
+        return mimeType != null ? mimeType : contentType;
+    }
+
     @Override
     public final IAssetStream open(final AssetURL url) throws Exception {
-
-        return null;
+        URL webUrl = new URL(url.withMimeType(null).toString());
+        HttpURLConnection request = (HttpURLConnection) webUrl.openConnection();
+        request.setRequestMethod("GET");
+        request.setInstanceFollowRedirects(false);
+        //Store the asset mime-type in X-Asset-Type if it exists otherwise guess it from Content-Type.
+        String mimeType = request.getHeaderField("X-Asset-Type");
+        if (mimeType == null) {
+            mimeType = attemptInferMimeType(request.getHeaderField("Content-Type"));
+        }
+        InputStream is = request.getInputStream();
+        return new BasicAssetStream(mimeType, is);
     }
 }

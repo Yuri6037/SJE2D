@@ -28,34 +28,9 @@
 
 package com.github.yuri6037.sje2d.asset.protocol;
 
-import com.github.yuri6037.sje2d.asset.engine.system.stream.AssetInputStream;
-
-import java.io.InputStream;
-
-public final class BasicAssetStream extends AssetInputStream {
-    private final String mimeType;
-
-    /**
-     * Creates a new BasicAssetStream from an InputStream.
-     * @param stream the input stream.
-     */
-    public BasicAssetStream(final InputStream stream) {
-        super(stream);
-        mimeType = null;
-    }
-
-    /**
-     * Creates a new BasicAssetStream from an existing InputStream and a mime-type.
-     * @param stream the InputStream to wrap.
-     * @param mimeType the mimeType of the request response.
-     */
-    public BasicAssetStream(final String mimeType, final InputStream stream) {
-        super(stream);
-        this.mimeType = mimeType;
-    }
-
+public final class HttpProtocol extends WebRequestProtocol {
     @Override
-    public String getMimeType() {
-        return mimeType;
+    public String getName() {
+        return "http";
     }
 }
