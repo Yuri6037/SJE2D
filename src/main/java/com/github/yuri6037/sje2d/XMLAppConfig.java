@@ -54,8 +54,8 @@ import java.util.List;
 final class XMLAppConfig implements IInputConfig, IWindowConfig, IAssetConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(XMLAppConfig.class);
 
-    private static final QName NAME_PROTOCOL = new QName("minengine", "protocol");
-    private static final QName NAME_FACTORY = new QName("minengine", "factory");
+    private static final QName NAME_PROTOCOL = new QName("sje2d", "protocol");
+    private static final QName NAME_FACTORY = new QName("sje2d", "factory");
 
     private final HashMap<String, Binding> bindings = new HashMap<>();
     private final HashMap<Key, List<Binding>> bindingsInv = new HashMap<>();
