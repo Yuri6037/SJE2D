@@ -89,6 +89,17 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
         }
     }
 
+    private boolean closeAndReturn(final IAssetStream stream) {
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                LOGGER.warn("Failed to close asset stream", e);
+            }
+        }
+        return false;
+    }
+
     private boolean init() {
         LOGGER.info("Initializing asset loader for '{}'", url);
         IAssetProtocol protocol = registry.getProtocol(url.getProtocol());
@@ -108,39 +119,31 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
             if (url.getMimeType() == null) {
                 if (!protocol.canProvideMimeType()) {
                     LOGGER.error("The protocol '{}' does not support asset mime-type inference", url.getProtocol());
-                    return false;
+                    return closeAndReturn(stream);
                 }
                 String mimeType = stream.getMimeType();
                 if (mimeType == null) {
                     LOGGER.error("Failed to infer mime-type for url '{}'", url);
-                    return false;
+                    return closeAndReturn(stream);
                 }
                 url = url.withMimeType(mimeType);
             }
             factory = getFactory(url);
             if (factory == null) {
                 LOGGER.error("Unknown asset mime-type '{}'", url.getMimeType());
-                return false;
+                return closeAndReturn(stream);
             }
             LOGGER.debug("Using factory {}", factory.getClass().getName());
             loader = factory.create(stream, url);
             if (loader == null) {
                 LOGGER.error("Unsupported create operation in factory '{}'", factory.getClass().getName());
-                return false;
+                return closeAndReturn(stream);
             }
             LOGGER.debug("Using loader {}", loader.getClass().getName());
             return true;
         } catch (Exception e) {
             LOGGER.error("Failed to create and/or initialize an asset loader", e);
-            return false;
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    LOGGER.warn("Failed to close asset stream", e);
-                }
-            }
+            return closeAndReturn(stream);
         }
     }
 
