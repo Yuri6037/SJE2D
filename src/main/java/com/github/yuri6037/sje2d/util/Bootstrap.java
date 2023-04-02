@@ -44,7 +44,7 @@ public final class Bootstrap {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Bootstrap.class);
-    private static final String BOOTSTRAP_PROP = "com.github.yuri6037.minengine.bootstrap";
+    private static final String BOOTSTRAP_PROP = "com.github.yuri6037.sje2d.bootstrap";
 
     /**
      * @return true if the JVM was started on the main thread, false otherwise.

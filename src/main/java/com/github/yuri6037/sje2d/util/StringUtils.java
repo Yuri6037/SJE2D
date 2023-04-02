@@ -28,8 +28,8 @@
 
 package com.github.yuri6037.sje2d.util;
 
-public final class SString {
-    private SString() {
+public final class StringUtils {
+    private StringUtils() {
     }
 
     /**

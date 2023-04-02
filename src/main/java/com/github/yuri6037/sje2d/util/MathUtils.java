@@ -28,8 +28,8 @@
 
 package com.github.yuri6037.sje2d.util;
 
-public final class SMath {
-    private SMath() {
+public final class MathUtils {
+    private MathUtils() {
     }
 
     /**

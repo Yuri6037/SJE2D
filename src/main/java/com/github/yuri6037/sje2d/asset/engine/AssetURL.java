@@ -28,7 +28,7 @@
 
 package com.github.yuri6037.sje2d.asset.engine;
 
-import com.github.yuri6037.sje2d.util.SString;
+import com.github.yuri6037.sje2d.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -198,9 +198,9 @@ public final class AssetURL {
         }
         int id = mimeType.indexOf('/');
         if (id != -1) {
-            return SString.capitalize(mimeType.substring(0, id));
+            return StringUtils.capitalize(mimeType.substring(0, id));
         } else {
-            return SString.capitalize(mimeType);
+            return StringUtils.capitalize(mimeType);
         }
     }
 

@@ -33,7 +33,7 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
-import com.github.yuri6037.sje2d.util.SMath;
+import com.github.yuri6037.sje2d.util.MathUtils;
 import org.lwjgl.opengl.GL12;
 
 import javax.imageio.ImageIO;
@@ -58,7 +58,7 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
     @Override
     public Result load(final AssetDepMap dependencies) throws Exception {
         BufferedImage image = ImageIO.read(StreamUtils.makeInputStream(stream));
-        if (!SMath.isPowerOfTwo(image.getWidth()) || !SMath.isPowerOfTwo(image.getHeight())) {
+        if (!MathUtils.isPowerOfTwo(image.getWidth()) || !MathUtils.isPowerOfTwo(image.getHeight())) {
             throw new IllegalArgumentException("Image size is not a power of 2");
         }
         buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 5);
