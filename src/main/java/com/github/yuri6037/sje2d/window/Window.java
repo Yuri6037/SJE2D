@@ -70,7 +70,7 @@ public final class Window implements AutoCloseable {
         setupEventHandlers(config);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
-        refreshGL(width, height);
+        refreshGL(config.getWidth(), config.getHeight());
         glfwShowWindow(window);
         if (config.isVsync()) {
             setVsync(true);
