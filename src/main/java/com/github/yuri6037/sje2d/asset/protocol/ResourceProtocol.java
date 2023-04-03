@@ -47,7 +47,12 @@ public final class ResourceProtocol implements IAssetProtocol {
 
     @Override
     public IAssetStream open(final AssetURL url) {
-        InputStream stream = Application.getResource(url.getPath());
+        InputStream stream;
+        if ("engine".equals(url.getParameter("scope"))) {
+            stream = Application.class.getClassLoader().getResourceAsStream(url.getPath());
+        } else {
+            stream = Application.getResource(url.getPath());
+        }
         if (stream == null) {
             LOGGER.error("Could not find resource '{}'", url.getPath());
             return null;
