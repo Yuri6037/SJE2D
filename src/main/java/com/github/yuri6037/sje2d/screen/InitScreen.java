@@ -26,34 +26,48 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.test;
+package com.github.yuri6037.sje2d.screen;
 
-import com.github.yuri6037.sje2d.window.WindowException;
-import org.junit.Test;
+import com.github.yuri6037.sje2d.Application;
+import com.github.yuri6037.sje2d.asset.Texture;
+import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
+import com.github.yuri6037.sje2d.render.Color;
+import com.github.yuri6037.sje2d.render.Point;
 
-public class TestWindow {
+public final class InitScreen extends BasicScreen {
+    private static final float SCALE_SPEED = 0.5f;
+    private static final float SCALE_LOW = 0.5f;
+    private static final float SCALE_HIGH = 1.5f;
+
+    private final AssetStore<Texture>.Ref texture;
+    private float scale = 1.0f;
+    private float scaleF = 1.0f;
 
     /**
-     * Basic window test.
-     * @throws WindowException if the window couldn't be created.
+     * Creates a new BasicScreen.
+     * @param app the Application this screen is attached to.
      */
-    @Test
-    public void basic() throws WindowException {
-        /*Window window = new Window(1024, 768, "Test window");
-        Render render = new Render();
-        render.setTransformCenter(new Point(.4f, .4f));
-        float width = window.getWidth() / 2.0f;
-        float height = window.getHeight() / 2.0f;
-        Point pos = new Point(width - width / 2.0f, height - height / 2.0f);
-        int rotation = 0;
-        window.setVsync(true);
-        while (!window.shouldClose()) {
-            render.setColor(Color.RED);
-            render.setRotation(rotation);
-            render.drawRect(pos.x, pos.y, width, height);
-            window.update();
-            rotation += 1 % 360;
+    public InitScreen(final Application app) {
+        super(app);
+        texture = getApp().getAssets().get(Texture.class, "Engine/Init");
+    }
+
+    @Override
+    public void open() {
+        getRender().setTransformCenter(new Point(0.5f, 0.5f));
+        getRender().setColor(Color.WHITE);
+    }
+
+    @Override
+    public void update(final float deltaTime) {
+        scale += scaleF * deltaTime;
+        if (scale >= SCALE_HIGH) {
+            scaleF = -SCALE_SPEED;
+        } else if (scale <= SCALE_LOW) {
+            scaleF = SCALE_SPEED;
         }
-        window.close();*/
+        texture.get().lock();
+        getRender().setScale(scale);
+        getRender().drawRect(width() / 2 - 256, height() / 2 - 256, 512, 512);
     }
 }

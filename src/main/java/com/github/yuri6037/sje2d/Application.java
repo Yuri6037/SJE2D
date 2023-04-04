@@ -30,11 +30,13 @@ package com.github.yuri6037.sje2d;
 
 import com.github.yuri6037.sje2d.asset.config.IAssetConfig;
 import com.github.yuri6037.sje2d.asset.config.TypeRegistry;
+import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.manager.AssetManager;
 import com.github.yuri6037.sje2d.asset.engine.manager.AssetManagerProxy;
 import com.github.yuri6037.sje2d.config.AppType;
 import com.github.yuri6037.sje2d.input.IInputConfig;
 import com.github.yuri6037.sje2d.screen.IScreen;
+import com.github.yuri6037.sje2d.screen.InitScreen;
 import com.github.yuri6037.sje2d.util.Bootstrap;
 import com.github.yuri6037.sje2d.util.Timer;
 import com.github.yuri6037.sje2d.window.IWindowConfig;
@@ -49,6 +51,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 
 public class Application {
     private static final Logger LOGGER
@@ -141,12 +144,37 @@ public class Application {
         }
     }
 
-    protected void onStart() {
-
+    /**
+     * Called by onStart to register all application assets.
+     * Override this function to queue custom assets.
+     * @throws MalformedURLException if some asset had a bad url.
+     */
+    protected void registerAssets() throws MalformedURLException {
     }
 
-    protected void onTerminate() {
+    /**
+     * Called by run before the main loop.
+     * Override this function to customize the startup behavior of the application.
+     */
+    protected void onStart() {
+        try {
+            assets.queue(new AssetURL("texture/jpg resource://init.jpg?scope=engine&vpath=Engine/Init"));
+            syncAssetsManager();
+            setScreen(new InitScreen(this));
+            registerAssets();
+        } catch (MalformedURLException e) {
+            LOGGER.error("Failed to register assets", e);
+        }
+    }
 
+    /**
+     * Called by run after the main loop.
+     * Override this function to customize the shutdown behavior of the application.
+     */
+    protected void onTerminate() {
+        if (curScreen != null) {
+            curScreen.close();
+        }
     }
 
     /**
@@ -167,6 +195,7 @@ public class Application {
         onStart();
         while (!window.shouldClose()) {
             timer.update();
+            manager.update();
             if (curScreen != null) {
                 curScreen.update(timer.getDeltaTime());
             }
