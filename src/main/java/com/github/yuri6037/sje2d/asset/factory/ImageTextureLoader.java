@@ -61,11 +61,11 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
         if (!MathUtils.isPowerOfTwo(image.getWidth()) || !MathUtils.isPowerOfTwo(image.getHeight())) {
             throw new IllegalArgumentException("Image size is not a power of 2");
         }
-        buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 5);
+        buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);
         for (int x = 0; x != image.getWidth(); ++x) {
             for (int y = 0; y != image.getHeight(); ++y) {
                 int argb = image.getRGB(x, y);
-                int offset = y * image.getWidth() + x * 4;
+                int offset = y * image.getWidth() * 4 + x * 4;
                 buffer.put(offset, (byte) ((argb >> 16) & 0xFF)); //R channel
                 buffer.put(offset + 1, (byte) ((argb >> 8) & 0xFF)); //G channel
                 buffer.put(offset + 2, (byte) (argb & 0xFF)); //B channel
