@@ -34,7 +34,10 @@ import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.util.MathUtils;
+import com.github.yuri6037.sje2d.util.StringEnum;
 import org.lwjgl.opengl.GL12;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -45,14 +48,40 @@ import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
 public final class ImageTextureLoader extends BaseLoader<Texture> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageTextureLoader.class);
+
+    private static final StringEnum<Integer> WRAP_MODE = StringEnum.create(
+            "edgeclamp", GL12.GL_CLAMP_TO_EDGE,
+            "clamp", GL_CLAMP,
+            "repeat", GL_REPEAT
+    );
+
+    private static final StringEnum<Integer> SAMPLE_MODE = StringEnum.create(
+            "nearest", GL_NEAREST,
+            "linear", GL_LINEAR
+    );
+
     private final IAssetStream stream;
     private ByteBuffer buffer;
     private int width;
     private int height;
+    private int xWrap;
+    private int yWrap;
+    private int min;
+    private int mag;
 
     ImageTextureLoader(final AssetURL url, final IAssetStream stream) {
         super(url);
         this.stream = stream;
+    }
+
+    private void computeModes() {
+        xWrap = WRAP_MODE.get(GL12.GL_CLAMP_TO_EDGE, url.getParameter("xwrap"));
+        yWrap = WRAP_MODE.get(GL12.GL_CLAMP_TO_EDGE, url.getParameter("ywrap"));
+        min = SAMPLE_MODE.get(GL_NEAREST, url.getParameter("min"));
+        mag = SAMPLE_MODE.get(GL_NEAREST, url.getParameter("mag"));
+        LOGGER.debug("X-wrap mode: {}, Y-wrap mode: {}, min sample mode: {}, mag sample mode: {}", xWrap, yWrap,
+                min, mag);
     }
 
     @Override
@@ -74,6 +103,7 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
         }
         width = image.getWidth();
         height = image.getHeight();
+        computeModes();
         return Result.ready();
     }
 
@@ -82,10 +112,10 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
         glEnable(GL_TEXTURE_2D);
         int texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, xWrap);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, yWrap);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         glDisable(GL_TEXTURE_2D);
         return new Texture(texture);
