@@ -176,6 +176,16 @@ public final class AssetURL {
         return queryParams == null ? null : queryParams.get(name);
     }
 
+    /**
+     * Gets a query parameter by name.
+     * @param name the name of the query parameter.
+     * @param def the default value to return if the parameter name was not found.
+     * @return the query parameter value if the name was found, def otherwise.
+     */
+    public String getParameter(final String name, final String def) {
+        return queryParams == null ? def : queryParams.get(name);
+    }
+
     //CHECKSTYLE OFF: HiddenField
     /**
      * Replaces the mime-type of this URL with a different one.

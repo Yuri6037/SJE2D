@@ -28,6 +28,9 @@
 
 package com.github.yuri6037.sje2d.render;
 
+import com.github.yuri6037.sje2d.asset.Texture;
+import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
+
 import java.util.Objects;
 
 //CHECKSTYLE OFF: AvoidStarImport
@@ -78,6 +81,23 @@ public final class Render {
      */
     public void setColor(final Color color) {
         glColor4f(color.r(), color.g(), color.b(), color.a());
+    }
+
+    /**
+     * Sets a texture to apply to all future rendering operations.
+     * @param texture the texture object instance.
+     */
+    public void setTexture(final Texture texture) {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture.getGLId());
+    }
+
+    /**
+     * Sets a texture to apply to all future rendering operations.
+     * @param asset the asset reference.
+     */
+    public void setTexture(final AssetStore<Texture>.Ref asset) {
+        setTexture(asset.get());
     }
 
     /**

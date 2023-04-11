@@ -26,48 +26,32 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.screen;
+package com.github.yuri6037.sje2d.util;
 
-import com.github.yuri6037.sje2d.Application;
-import com.github.yuri6037.sje2d.asset.Texture;
-import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
-import com.github.yuri6037.sje2d.render.Color;
-import com.github.yuri6037.sje2d.render.Point;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 
-public final class InitScreen extends BasicScreen {
-    private static final float SCALE_SPEED = 0.5f;
-    private static final float SCALE_LOW = 0.5f;
-    private static final float SCALE_HIGH = 1.5f;
-
-    private final AssetStore<Texture>.Ref texture;
-    private float scale = 1.0f;
-    private float scaleF = 1.0f;
+public final class ImageUtils {
+    private ImageUtils() {
+    }
 
     /**
-     * Creates a new BasicScreen.
-     * @param app the Application this screen is attached to.
+     * Converts a Java BufferedImage to a contiguous array of texels in RGBA format.
+     * @param image the image to convert.
+     * @return the newly allocated ByteBuffer.
      */
-    public InitScreen(final Application app) {
-        super(app);
-        texture = getApp().getAssets().get(Texture.class, "Engine/Init");
-    }
-
-    @Override
-    public void open() {
-        getRender().setTransformCenter(new Point(0.5f, 0.5f));
-        getRender().setColor(Color.WHITE);
-    }
-
-    @Override
-    public void update(final float deltaTime) {
-        scale += scaleF * deltaTime;
-        if (scale >= SCALE_HIGH) {
-            scaleF = -SCALE_SPEED;
-        } else if (scale <= SCALE_LOW) {
-            scaleF = SCALE_SPEED;
+    public static ByteBuffer imageToBuffer(final BufferedImage image) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);
+        for (int x = 0; x != image.getWidth(); ++x) {
+            for (int y = 0; y != image.getHeight(); ++y) {
+                int argb = image.getRGB(x, y);
+                int offset = y * image.getWidth() * 4 + x * 4;
+                buffer.put(offset, (byte) ((argb >> 16) & 0xFF)); //R channel
+                buffer.put(offset + 1, (byte) ((argb >> 8) & 0xFF)); //G channel
+                buffer.put(offset + 2, (byte) (argb & 0xFF)); //B channel
+                buffer.put(offset + 3, (byte) ((argb >> 24) & 0xFF)); //A channel
+            }
         }
-        getRender().setTexture(texture);
-        getRender().setScale(scale);
-        getRender().drawRect(width() / 2 - 256, height() / 2 - 256, 512, 512);
+        return buffer;
     }
 }

@@ -43,4 +43,21 @@ public final class StringUtils {
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
+
+    /**
+     * Parse a boolean value from a string accepting multiple boolean formats.
+     * @param str the string to parse.
+     * @return a boolean which matches the string.
+     */
+    public static boolean parseBoolean(final String str) {
+        if ("1".equals(str) || "true".equals(str) || "on".equals(str)) {
+            return true;
+        }
+        try {
+            int v = Integer.parseInt(str);
+            return v > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

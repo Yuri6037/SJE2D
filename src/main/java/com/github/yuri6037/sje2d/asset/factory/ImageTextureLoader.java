@@ -33,6 +33,7 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
+import com.github.yuri6037.sje2d.util.ImageUtils;
 import com.github.yuri6037.sje2d.util.MathUtils;
 import com.github.yuri6037.sje2d.util.StringEnum;
 import org.lwjgl.opengl.GL12;
@@ -90,17 +91,7 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
         if (!MathUtils.isPowerOfTwo(image.getWidth()) || !MathUtils.isPowerOfTwo(image.getHeight())) {
             throw new IllegalArgumentException("Image size is not a power of 2");
         }
-        buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);
-        for (int x = 0; x != image.getWidth(); ++x) {
-            for (int y = 0; y != image.getHeight(); ++y) {
-                int argb = image.getRGB(x, y);
-                int offset = y * image.getWidth() * 4 + x * 4;
-                buffer.put(offset, (byte) ((argb >> 16) & 0xFF)); //R channel
-                buffer.put(offset + 1, (byte) ((argb >> 8) & 0xFF)); //G channel
-                buffer.put(offset + 2, (byte) (argb & 0xFF)); //B channel
-                buffer.put(offset + 3, (byte) ((argb >> 24) & 0xFF)); //A channel
-            }
-        }
+        buffer = ImageUtils.imageToBuffer(image);
         width = image.getWidth();
         height = image.getHeight();
         computeModes();
@@ -109,15 +100,11 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
 
     @Override
     protected Texture createAsset() {
-        glEnable(GL_TEXTURE_2D);
-        int texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
+        Texture texture = new Texture(buffer, width, height);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, xWrap);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, yWrap);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-        glDisable(GL_TEXTURE_2D);
-        return new Texture(texture);
+        return texture;
     }
 }

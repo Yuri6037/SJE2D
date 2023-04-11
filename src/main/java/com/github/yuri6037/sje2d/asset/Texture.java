@@ -31,35 +31,40 @@ package com.github.yuri6037.sje2d.asset;
 import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 
 //CHECKSTYLE OFF: AvoidStarImport
+import java.nio.ByteBuffer;
+
 import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
-public final class Texture implements IAsset {
+public class Texture implements IAsset {
     private final int id;
 
     /**
-     * Creates a new texture from an OpenGL id.
-     * @param id the OpenGL object id.
+     * Creates a new texture from a buffer and its size.
+     * @param buffer the buffer containing all texel data.
+     * @param width the texture width.
+     * @param height the texture height.
      */
-    public Texture(final int id) {
-        this.id = id;
-    }
-
-    /**
-     * Binds the texture.
-     */
-    public void lock() {
+    public Texture(final ByteBuffer buffer, final int width, final int height) {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, id);
+        int texture = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        id = texture;
     }
 
     /**
-     * Unbinds the texture.
+     * @return The GL index of the 2D texture object.
      */
-    public void unlock() {
-        glDisable(GL_TEXTURE_2D);
+    public final int getGLId() {
+        return id;
     }
 
+    /**
+     * Unloads this texture.
+     * NOTE: when overriding this function, you should call back this implementation as otherwise the underlying
+     * GL texture object may leak.
+     */
     @Override
     public void unload() {
         glDeleteTextures(id);
