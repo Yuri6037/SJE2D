@@ -172,11 +172,11 @@ public final class VirtualPathBuilder {
      * @return the new virtual path.
      */
     public String build() {
-        if (namespace != null) {
-            components.add(0, namespace);
-        }
         if (providedType != null) {
             components.add(0, providedType);
+        }
+        if (namespace != null) {
+            components.add(0, namespace);
         }
         String res = String.join("/", components);
         components = null;
