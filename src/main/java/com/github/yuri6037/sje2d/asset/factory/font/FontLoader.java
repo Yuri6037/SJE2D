@@ -39,16 +39,13 @@ import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.config.FontType;
 import com.github.yuri6037.sje2d.config.RuleType;
+import com.github.yuri6037.sje2d.config.SystemType;
 import com.github.yuri6037.sje2d.util.MathUtils;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public final class FontLoader implements ITAssetLoader<Font> {
     private final InputStream stream;
@@ -57,11 +54,6 @@ public final class FontLoader implements ITAssetLoader<Font> {
     private final ArrayList<Rule> rules = new ArrayList<>();
     private AssetURL baseUrl;
     private final AssetURL url;
-
-    private static final QName RULE_FAMILY_QNAME = new QName("sje2d", "family");
-    private static final QName RULE_SIZE_QNAME = new QName("sje2d", "size");
-    private static final QName RULE_ITALIC_QNAME = new QName("sje2d", "italic");
-    private static final QName RULE_BOLD_QNAME = new QName("sje2d", "bold");
 
     /**
      * Creates a new FontLoader.
@@ -73,29 +65,15 @@ public final class FontLoader implements ITAssetLoader<Font> {
         this.url = url;
     }
 
-    private AssetURL loadRuleContent(final String type, final List<Serializable> lst) throws Exception {
-        if ("url".equals(type)) {
-            if (lst.size() != 1) {
-                throw new IllegalArgumentException("Invalid rule format");
-            }
-            String s = (String) lst.get(0);
-            return new AssetURL("font-bitmap/ttf", s);
-        } else if ("system".equals(type)) {
-            AssetURLBuilder builder = new AssetURLBuilder();
-            builder.protocol("none").mimeType("font-bitmap/system");
-            for (Serializable item : lst) {
-                @SuppressWarnings("unchecked") JAXBElement<String> elem = (JAXBElement<String>) item;
-                if (RULE_FAMILY_QNAME.equals(elem.getName())) {
-                    builder.path(elem.getValue());
-                } else if (RULE_SIZE_QNAME.equals(elem.getName())) {
-                    builder.parameter("size", elem.getValue());
-                } else if (RULE_BOLD_QNAME.equals(elem.getName())) {
-                    builder.parameter("bold", elem.getValue());
-                } else if (RULE_ITALIC_QNAME.equals(elem.getName())) {
-                    builder.parameter("italic", elem.getValue());
-                }
-            }
-            return builder.build();
+    private AssetURL loadRuleContent(final SystemType system, final String url1) throws Exception {
+        if (url1 != null) {
+            return new AssetURL("font-bitmap/ttf", url1);
+        } else if (system != null) {
+            return new AssetURLBuilder().protocol("none").mimeType("font-bitmap/system").path(system.getFamily())
+                    .parameter("size", system.getSize())
+                    .parameter("bold", system.getBold())
+                    .parameter("italic", system.getItalic())
+                    .build();
         } else {
             throw new IllegalArgumentException("Invalid rule type");
         }
@@ -110,11 +88,11 @@ public final class FontLoader implements ITAssetLoader<Font> {
         if (!MathUtils.isPowerOfTwo(bitmapWidth)) {
             throw new IllegalArgumentException("Font bitmap width must be a power of 2");
         }
-        baseUrl = loadRuleContent(font.getBase().getType(), font.getBase().getContent());
+        baseUrl = loadRuleContent(font.getBase().getSystem(), font.getBase().getUrl());
         for (RuleType rule: font.getRules().getRule()) {
-            int min = Integer.parseInt(rule.getMin());
-            int max = Integer.parseInt(rule.getMax());
-            AssetURL url1 = loadRuleContent(rule.getType(), rule.getContent());
+            int min = Integer.parseInt(rule.getMin(), 16);
+            int max = Integer.parseInt(rule.getMax(), 16);
+            AssetURL url1 = loadRuleContent(rule.getSystem(), rule.getUrl());
             rules.add(new Rule(min, max, url1));
         }
         return Result.ready();

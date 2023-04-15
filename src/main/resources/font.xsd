@@ -3,25 +3,27 @@
            targetNamespace="sje2d" xmlns="sje2d"
            attributeFormDefault="unqualified" elementFormDefault="qualified">
   <xs:element name="font" type="fontType"/>
-  <xs:complexType name="baseType" mixed="true">
+  <xs:complexType name="systemType">
     <xs:sequence>
       <xs:element type="xs:string" name="family"/>
       <xs:element type="xs:string" name="size"/>
       <xs:element type="xs:string" name="italic"/>
       <xs:element type="xs:string" name="bold"/>
     </xs:sequence>
-    <xs:attribute type="xs:string" name="type"/>
   </xs:complexType>
-  <xs:complexType name="ruleType" mixed="true">
+  <xs:complexType name="baseType">
     <xs:sequence>
-      <xs:element type="xs:string" name="family" minOccurs="0"/>
-      <xs:element type="xs:string" name="size" minOccurs="0"/>
-      <xs:element type="xs:string" name="italic" minOccurs="0"/>
-      <xs:element type="xs:string" name="bold" minOccurs="0"/>
+      <xs:element type="xs:string" name="url" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="systemType" name="system" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ruleType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="url" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="systemType" name="system" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute type="xs:string" name="min" use="required"/>
     <xs:attribute type="xs:string" name="max" use="required"/>
-    <xs:attribute type="xs:string" name="type" use="required"/>
   </xs:complexType>
   <xs:complexType name="rulesType">
     <xs:sequence>
