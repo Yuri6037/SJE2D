@@ -49,7 +49,7 @@ public final class InitScreen extends BasicScreen {
      */
     public InitScreen(final Application app) {
         super(app);
-        texture = getApp().getAssets().get(Texture.class, "Engine/Init");
+        texture = getApp().getAssets().get(Texture.class, "Engine/Texture/Init");
     }
 
     @Override
