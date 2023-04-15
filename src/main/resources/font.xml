@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<font xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
+      xsi:schemaLocation="sje2d file:///Users/yuri/Projects/BrickBroken/MiniEngine/src/main/resources/font.xsd">
+    <name>Default</name>
+    <width>1024</width>
+    <base type="system">
+        <family>Default</family>
+        <size>12</size>
+        <italic>false</italic>
+        <bold>false</bold>
+    </base>
+    <rules>
+        <rule min="4E00" max="9FFF" type="url">file:///myfont</rule>
+        <rule min="1F601" max="1F64F" type="system">
+            <family>Noto</family>
+            <size>12</size>
+            <italic>false</italic>
+            <bold>false</bold>
+        </rule>
+    </rules>
+</font>

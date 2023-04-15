@@ -39,6 +39,7 @@
                     <packageName>com.github.yuri6037.sje2d.config</packageName>
                     <sources>
                         <source>src/main/resources/app.xsd</source>
+                        <source>src/main/resources/font.xsd</source>
                     </sources>
                 </configuration>
             </plugin>
