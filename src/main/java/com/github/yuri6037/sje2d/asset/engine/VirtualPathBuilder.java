@@ -38,7 +38,7 @@ import java.util.Iterator;
 public final class VirtualPathBuilder {
     private final AssetURL url;
     private ArrayList<String> components;
-    private final String namespace;
+    private String namespace;
     private String providedType;
 
     /**
@@ -93,17 +93,28 @@ public final class VirtualPathBuilder {
         Collections.reverse(components);
     }
 
+    //CHECKSTYLE OFF: HiddenField
+    /**
+     * Replaces the namespace component of this virtual path.
+     * @param namespace the new namespace component.
+     * @return this.
+     */
+    public VirtualPathBuilder setNamespace(final String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
+    //CHECKSTYLE ON
+
     /**
      * Replaces the type component of this virtual path.
      * @param type the new type component.
      * @return this.
      */
     public VirtualPathBuilder setType(final String type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Cannot set a NULL provided type");
-        }
         providedType = type;
-        guessVirtualPath();
+        if (providedType != null) {
+            guessVirtualPath();
+        }
         return this;
     }
 
@@ -161,9 +172,11 @@ public final class VirtualPathBuilder {
      * @return the new virtual path.
      */
     public String build() {
-        components.add(0, providedType);
         if (namespace != null) {
             components.add(0, namespace);
+        }
+        if (providedType != null) {
+            components.add(0, providedType);
         }
         String res = String.join("/", components);
         components = null;

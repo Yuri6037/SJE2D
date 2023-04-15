@@ -39,8 +39,6 @@ public class AssetURLBuilder {
     private String path;
     private final HashMap<String, String> params = new HashMap<>();
 
-    //CHECKSTYLE OFF: HiddenField
-
     /**
      * Creates a new empty AssetURLBuilder.
      */
@@ -62,6 +60,7 @@ public class AssetURLBuilder {
         }
     }
 
+    //CHECKSTYLE OFF: HiddenField
     /**
      * Sets the mime-type.
      * @param mimeType the new mime-type.
