@@ -31,7 +31,8 @@ package com.github.yuri6037.sje2d.asset.factory.font;
 import com.github.yuri6037.sje2d.asset.FontBitmap;
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
-import com.github.yuri6037.sje2d.asset.factory.BaseLoader;
+import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
+import com.github.yuri6037.sje2d.asset.engine.system.ITAssetLoader;
 import com.github.yuri6037.sje2d.util.ImageUtils;
 import com.github.yuri6037.sje2d.util.MathUtils;
 import org.slf4j.Logger;
@@ -44,15 +45,22 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
-public abstract class FontBitmapLoader extends BaseLoader<FontBitmap> {
+public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FontBitmapLoader.class);
+
+    //CHECKSTYLE OFF: VisibilityModifier
+    /**
+     * The AssetURL that is being loaded.
+     */
+    protected final AssetURL url;
+    //CHECKSTYLE ON
 
     /**
      * Creates a new FontBitmapLoader.
      * @param url the asset url that is going to be loaded.
      */
     public FontBitmapLoader(final AssetURL url) {
-        super(url);
+        this.url = url;
     }
 
     /**
@@ -63,6 +71,7 @@ public abstract class FontBitmapLoader extends BaseLoader<FontBitmap> {
     protected abstract Font buildFont() throws Exception;
 
     private int width;
+    private String vpath;
     private int charHeight;
     private final HashMap<Character, Integer> charWidth = new HashMap<>();
     private ByteBuffer buffer;
@@ -75,6 +84,8 @@ public abstract class FontBitmapLoader extends BaseLoader<FontBitmap> {
         }
         int blockSize =  width / 16;
         int plane = Integer.parseInt(url.getParameter("plane", "0"));
+        String baseVpath = url.getParameter("vpath", "Font/Generic");
+        vpath = baseVpath + "/Plane" + plane;
         Font font = buildFont();
         LOGGER.debug("Building font bitmap ({}x{} - {}) for plane #{}, with font '{}'...", width, width, blockSize,
                 plane, font);
@@ -105,7 +116,7 @@ public abstract class FontBitmapLoader extends BaseLoader<FontBitmap> {
     }
 
     @Override
-    protected final FontBitmap createAsset() {
-        return new FontBitmap(buffer, width, charHeight, charWidth);
+    public final AssetStore<FontBitmap> create() throws Exception {
+        return new AssetStore<>(vpath, new FontBitmap(buffer, width, charHeight, charWidth));
     }
 }

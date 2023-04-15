@@ -28,11 +28,7 @@
 
 package com.github.yuri6037.sje2d.asset.engine;
 
-import com.github.yuri6037.sje2d.util.StringUtils;
-
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,7 +127,7 @@ public final class AssetURL {
         }
     }
 
-    private AssetURL(final String mimeType, final String protocol, final String path,
+    AssetURL(final String mimeType, final String protocol, final String path,
                      final HashMap<String, String> queryParams) {
         this.mimeType = mimeType;
         this.protocol = protocol;
@@ -196,65 +192,6 @@ public final class AssetURL {
         return new AssetURL(mimeType, protocol, path, queryParams);
     }
     //CHECKSTYLE ON
-
-    /**
-     * Guesses the type of the loaded asset from the mime-type specified in this url.
-     * @throws MalformedURLException if this asset does not have a mime-type.
-     * @return guessed asset type string.
-     */
-    public String guessAssetType() throws MalformedURLException {
-        if (mimeType == null) {
-            throw new MalformedURLException("No mime-type specified");
-        }
-        int id = mimeType.indexOf('/');
-        if (id != -1) {
-            return StringUtils.capitalize(mimeType.substring(0, id));
-        } else {
-            return StringUtils.capitalize(mimeType);
-        }
-    }
-
-    /**
-     * Guesses the virtual path of this asset URL.
-     * WARNING: There is no guarantee that the returned virtual path will be correct as the asset system can always
-     * override the virtual path.
-     * @return the virtual path which should be used to reference this asset.
-     * @throws MalformedURLException if this asset does not have a mime-type and no vpath query parameter was specified.
-     */
-    public String guessVirtualPath() throws MalformedURLException {
-        String namespace = getParameter("namespace");
-        String vpath = getParameter("vpath");
-        //If we have an explicit vpath specified, return it.
-        if (vpath != null) {
-            return namespace != null ? namespace + "/" + vpath : vpath;
-        }
-        //If no explicit vpath was specified, try to guess one.
-        String assetType = guessAssetType();
-        String[] split = getPath().split("/");
-        //Compute the inverse list of path components to compose the guessed virtual path.
-        ArrayList<String> components = new ArrayList<>();
-        String name = split[split.length - 1];
-        int id = name.indexOf('.');
-        if (id != -1) {
-            components.add(name.substring(0, id));
-        } else {
-            components.add(name);
-        }
-        for (int i = split.length - 2; i > 0; --i) {
-            if (!assetType.equalsIgnoreCase(split[i])) {
-                components.add(split[i]);
-            } else {
-                break;
-            }
-        }
-        components.add(assetType);
-        if (namespace != null) {
-            components.add(namespace);
-        }
-        //Reverse the components list and join it with '/'
-        Collections.reverse(components);
-        return String.join("/", components);
-    }
 
     @Override
     public String toString() {

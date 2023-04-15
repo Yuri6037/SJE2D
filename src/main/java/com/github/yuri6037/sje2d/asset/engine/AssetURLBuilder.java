@@ -26,42 +26,65 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.asset.factory;
+package com.github.yuri6037.sje2d.asset.engine;
 
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.VirtualPathBuilder;
-import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
-import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
-import com.github.yuri6037.sje2d.asset.engine.system.ITAssetLoader;
+import java.util.HashMap;
 
-public abstract class BaseLoader<T extends IAsset> implements ITAssetLoader<T> {
-    //CHECKSTYLE OFF: VisibilityModifier
-    /**
-     * The asset url.
-     */
-    protected final AssetURL url;
-    //CHECKSTYLE ON
+public class AssetURLBuilder {
+    private String mimeType;
+    private String protocol;
+    private String path;
+    private final HashMap<String, String> params = new HashMap<>();
 
-    private final String vpath;
+    //CHECKSTYLE OFF: HiddenField
 
     /**
-     * Creates a new BaseLoader.
-     * @param url the asset url that is going to be loaded.
+     * Sets the mime-type.
+     * @param mimeType the new mime-type.
+     * @return this.
      */
-    public BaseLoader(final AssetURL url) {
-        this.url = url;
-        vpath = new VirtualPathBuilder(url).build();
+    public AssetURLBuilder mimeType(final String mimeType) {
+        this.mimeType = mimeType;
+        return this;
     }
 
     /**
-     * Creates the asset.
-     * @return the asset object instance.
-     * @throws Exception if the asset could not be created.
+     * Sets the path.
+     * @param path the new path.
+     * @return this.
      */
-    protected abstract T createAsset() throws Exception;
+    public AssetURLBuilder path(final String path) {
+        this.path = path;
+        return this;
+    }
 
-    @Override
-    public final AssetStore<T> create() throws Exception {
-        return new AssetStore<>(vpath, createAsset());
+    /**
+     * Sets the protocol.
+     * @param protocol the new protocol.
+     * @return this.
+     */
+    public AssetURLBuilder protocol(final String protocol) {
+        this.protocol = protocol;
+        return this;
+    }
+    //CHECKSTYLE ON
+
+    /**
+     * Appends a parameter.
+     * @param name the parameter name.
+     * @param value the parameter value.
+     * @return this.
+     */
+    public AssetURLBuilder parameter(final String name, final String value) {
+        this.params.put(name, value);
+        return this;
+    }
+
+    /**
+     * Constructs an AssetURL from this builder.
+     * @return a new AssetURL.
+     */
+    public AssetURL build() {
+        return new AssetURL(mimeType, protocol, path, params);
     }
 }

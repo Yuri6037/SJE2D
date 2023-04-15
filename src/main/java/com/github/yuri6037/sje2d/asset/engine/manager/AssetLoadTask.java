@@ -41,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -75,17 +74,19 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
         return loader != null && ttl > 0;
     }
 
+    private String getGlobalAssetType(final AssetURL url1) {
+        if (!url1.getMimeType().contains("/")) {
+            return url1.getMimeType();
+        }
+        return url1.getMimeType().split("/")[0] + "/*";
+    }
+
     private IAssetFactory getFactory(final AssetURL url1) {
         IAssetFactory factory = registry.getFactory(url1.getMimeType());
         if (factory != null) {
             return factory;
         } else {
-            try {
-                return registry.getFactory(url1.guessAssetType().toLowerCase() + "/*");
-            } catch (MalformedURLException e) {
-                LOGGER.warn("Failed to guess asset type");
-                return null;
-            }
+            return registry.getFactory(getGlobalAssetType(url1));
         }
     }
 
