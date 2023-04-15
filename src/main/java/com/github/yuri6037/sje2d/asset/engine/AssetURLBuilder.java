@@ -99,7 +99,9 @@ public class AssetURLBuilder {
      * @return this.
      */
     public AssetURLBuilder parameter(final String name, final String value) {
-        this.params.put(name, value);
+        if (name != null && value != null) {
+            this.params.put(name, value);
+        }
         return this;
     }
 
