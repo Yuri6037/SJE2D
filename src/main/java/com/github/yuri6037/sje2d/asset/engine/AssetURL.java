@@ -30,6 +30,7 @@ package com.github.yuri6037.sje2d.asset.engine;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public final class AssetURL {
@@ -180,6 +181,13 @@ public final class AssetURL {
      */
     public String getParameter(final String name, final String def) {
         return queryParams == null ? def : queryParams.get(name);
+    }
+
+    /**
+     * @return an iterator over the query parameters in this URL.
+     */
+    public Iterator<Map.Entry<String, String>> parameters() {
+        return queryParams.entrySet().iterator();
     }
 
     //CHECKSTYLE OFF: HiddenField

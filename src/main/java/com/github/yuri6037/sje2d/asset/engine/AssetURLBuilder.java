@@ -30,6 +30,8 @@ package com.github.yuri6037.sje2d.asset.engine;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class AssetURLBuilder {
     private String mimeType;
@@ -38,6 +40,27 @@ public class AssetURLBuilder {
     private final HashMap<String, String> params = new HashMap<>();
 
     //CHECKSTYLE OFF: HiddenField
+
+    /**
+     * Creates a new empty AssetURLBuilder.
+     */
+    public AssetURLBuilder() {
+    }
+
+    /**
+     * Creates a new AssetURLBuilder from an existing AssetURL.
+     * @param url the url to clone into the new builder.
+     */
+    public AssetURLBuilder(final AssetURL url) {
+        mimeType = url.getMimeType();
+        protocol = url.getProtocol();
+        path = url.getPath();
+        Iterator<Map.Entry<String, String>> it = url.parameters();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            params.put(entry.getKey(), entry.getValue());
+        }
+    }
 
     /**
      * Sets the mime-type.
