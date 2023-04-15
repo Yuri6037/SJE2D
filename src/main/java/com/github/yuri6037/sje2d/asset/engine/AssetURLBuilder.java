@@ -28,6 +28,7 @@
 
 package com.github.yuri6037.sje2d.asset.engine;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class AssetURLBuilder {
@@ -83,8 +84,15 @@ public class AssetURLBuilder {
     /**
      * Constructs an AssetURL from this builder.
      * @return a new AssetURL.
+     * @throws MalformedURLException if the created URL would be invalid.
      */
-    public AssetURL build() {
+    public AssetURL build() throws MalformedURLException {
+        if (protocol == null) {
+            throw new MalformedURLException("Missing protocol when attempting to build AssetURL");
+        }
+        if (path == null) {
+            throw new MalformedURLException("Missing path when attempting to build AssetURL");
+        }
         return new AssetURL(mimeType, protocol, path, params);
     }
 }
