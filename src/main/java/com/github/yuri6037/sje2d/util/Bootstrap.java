@@ -51,7 +51,8 @@ public final class Bootstrap {
      */
     public static boolean isOnMainThread() {
         long pid = LibC.getpid();
-        return "1".equals(System.getenv("JAVA_STARTED_ON_FIRST_THREAD_" + pid));
+        return "1".equals(System.getenv("JAVA_STARTED_ON_FIRST_THREAD_" + pid))
+                && "true".equals(System.getProperty("java.awt.headless"));
     }
 
     /**
@@ -83,7 +84,8 @@ public final class Bootstrap {
     public static void startOnMainThread(final String[] args) {
         //Arrays.asList is a peace of shit: it causes UnsupportedOperationException
         List<String> cmd = new ArrayList<>(Arrays.asList(System.getProperty("java.home") + File.separator
-                + "bin" + File.separator + "java", "-XstartOnFirstThread", "-D" + BOOTSTRAP_PROP + "=1"));
+                + "bin" + File.separator + "java", "-XstartOnFirstThread", "-Djava.awt.headless=true",
+                "-D" + BOOTSTRAP_PROP + "=1"));
         cmd.addAll(ManagementFactory.getRuntimeMXBean().getInputArguments());
         cmd.add("-cp");
         cmd.add(ManagementFactory.getRuntimeMXBean().getClassPath());
