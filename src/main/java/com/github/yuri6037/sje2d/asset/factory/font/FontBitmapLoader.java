@@ -43,7 +43,12 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.HashMap;
+
+//CHECKSTYLE OFF: AvoidStarImport
+import static org.lwjgl.opengl.GL11.*;
+//CHECKSTYLE ON
 
 public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FontBitmapLoader.class);
@@ -73,7 +78,7 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
     private int width;
     private String vpath;
     private int charHeight;
-    private final HashMap<Character, Integer> charWidth = new HashMap<>();
+    private final HashMap<Integer, Integer> charWidth = new HashMap<>();
     private ByteBuffer buffer;
 
     @Override
@@ -87,8 +92,8 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
         String baseVpath = url.getParameter("vpath", "Font/Generic");
         vpath = baseVpath + "/Plane" + plane;
         Font font = buildFont();
-        LOGGER.debug("Building font bitmap ({}x{} - {}) for plane #{}, with font '{}'...", width, width, blockSize,
-                plane, font);
+        LOGGER.debug("Building font bitmap ({}x{} - {}) for plane #{}...", width, width, blockSize,
+                plane);
         if (plane * 256 > 1114112) {
             throw new IllegalArgumentException("Character plane is out of range");
         }
@@ -98,10 +103,11 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
         g2d.setFont(font);
         g2d.setColor(Color.WHITE);
         int ch = g2d.getFontMetrics().getHeight();
-        char c = (char) (plane * 256);
+        int c =  plane * 256;
         for (int i = 0; i != 16; ++i) {
             for (int j = 0; j != 16; ++j) {
-                String cs = String.valueOf(c);
+                byte[] arr = ByteBuffer.allocate(4).putInt(c).array();
+                String cs = new String(arr, Charset.forName("UTF-32"));
                 int cw = g2d.getFontMetrics().stringWidth(cs);
                 charWidth.put(c, cw);
                 int posx = j * blockSize + blockSize / 2 - cw / 2;
@@ -117,6 +123,11 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
 
     @Override
     public final AssetStore<FontBitmap> create() throws Exception {
-        return new AssetStore<>(vpath, new FontBitmap(buffer, width, charHeight, charWidth));
+        FontBitmap bitmap = new FontBitmap(buffer, width, charHeight, charWidth);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        return new AssetStore<>(vpath, bitmap);
     }
 }

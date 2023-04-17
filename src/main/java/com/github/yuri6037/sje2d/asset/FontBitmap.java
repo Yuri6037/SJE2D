@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 public class FontBitmap extends Texture {
-    private final HashMap<Character, Integer> charWidth;
+    private final HashMap<Integer, Integer> charWidth;
     private final int charHeight;
 
     /**
@@ -43,7 +43,7 @@ public class FontBitmap extends Texture {
      * @param charWidth the width of each character in this font bitmap.
      */
     public FontBitmap(final ByteBuffer buffer, final int width, final int charHeight,
-                      final HashMap<Character, Integer> charWidth) {
+                      final HashMap<Integer, Integer> charWidth) {
         //noinspection SuspiciousNameCombination
         super(buffer, width, width);
         this.charHeight = charHeight;
