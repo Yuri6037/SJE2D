@@ -61,7 +61,7 @@ public final class Font implements IAsset {
      * @param c the character to get the plane index of.
      * @return the plane index on which the character c is supposed to be rendered.
      */
-    public int getPlane(final char c) {
+    public int getPlane(final int c) {
         return c / 256;
     }
 
@@ -70,7 +70,7 @@ public final class Font implements IAsset {
      * @param c the target character to rasterize.
      * @return an instance of an AssetURL.
      */
-    public AssetURL getURL(final char c) {
+    public AssetURL getURL(final int c) {
         AssetURL url = baseUrl;
         for (Rule r : rules) {
             if (c >= r.min() && c <= r.max()) {
