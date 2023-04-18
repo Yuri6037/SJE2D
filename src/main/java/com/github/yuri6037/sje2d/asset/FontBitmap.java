@@ -62,7 +62,7 @@ public class FontBitmap extends Texture {
      * @param c the character to get the width of.
      * @return the width of the character or -1 if the character does not exist.
      */
-    public int getWidth(final char c) {
+    public int getWidth(final int c) {
         Integer i = charWidth.get(c);
         return i == null ? -1 : i;
     }
