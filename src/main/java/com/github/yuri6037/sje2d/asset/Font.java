@@ -66,6 +66,15 @@ public final class Font implements IAsset {
     }
 
     /**
+     * Gets the virtual path of a font bitmap based on the plane index.
+     * @param plane the plane index to search for.
+     * @return the corresponding asset virtual path for the given character plane.
+     */
+    public String getVirtualPath(final int plane) {
+        return basePath + "/Plane" + plane;
+    }
+
+    /**
      * Gets the AssetURL which should be used to load the font bitmap which rasterize a given character.
      * @param c the target character to rasterize.
      * @return an instance of an AssetURL.
