@@ -57,6 +57,13 @@ public final class Font implements IAsset {
     }
 
     /**
+     * @return the size of a single character block.
+     */
+    public int getBlockSize() {
+        return bitmapWidth / 16;
+    }
+
+    /**
      * Gets the plane on which a character is located.
      * @param c the character to get the plane index of.
      * @return the plane index on which the character c is supposed to be rendered.
