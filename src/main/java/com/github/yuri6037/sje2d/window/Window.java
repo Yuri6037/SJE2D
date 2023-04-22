@@ -102,6 +102,7 @@ public final class Window implements AutoCloseable {
     private void refreshGL(final int newWidth, final int newHeight) {
         width = newWidth;
         height = newHeight;
+        glViewport(0, 0, newWidth * 2, newHeight * 2);
         glPushMatrix();
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);

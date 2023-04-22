@@ -165,7 +165,7 @@ public final class FontRender {
             float v = gy / 16f;
             //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 2 (WTF?!)
             float u1 = u + 1 / 17f;
-            float v1 = v + 1 / 16f;
+            float v1 = v + 1 / 17f;
 
             glBegin(GL_QUADS);
             glTexCoord2f(u, v);
