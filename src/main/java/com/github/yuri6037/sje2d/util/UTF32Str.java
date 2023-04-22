@@ -40,7 +40,7 @@ public class UTF32Str {
 
         Iter(final byte[] bytes) {
             buffer = ByteBuffer.wrap(bytes);
-            size = bytes.length;
+            size = bytes.length / 4;
             index = 0;
         }
 
