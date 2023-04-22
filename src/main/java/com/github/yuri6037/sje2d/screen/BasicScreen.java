@@ -29,6 +29,7 @@
 package com.github.yuri6037.sje2d.screen;
 
 import com.github.yuri6037.sje2d.Application;
+import com.github.yuri6037.sje2d.asset.engine.manager.AssetManagerProxy;
 import com.github.yuri6037.sje2d.render.Render;
 
 public abstract class BasicScreen implements IScreen {
@@ -69,6 +70,13 @@ public abstract class BasicScreen implements IScreen {
      */
     protected Render getRender() {
         return render;
+    }
+
+    /**
+     * @return the AssetManagerProxy.
+     */
+    protected AssetManagerProxy getAssets() {
+        return getApp().getAssets();
     }
 
     @Override
