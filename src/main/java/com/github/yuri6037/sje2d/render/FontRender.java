@@ -30,11 +30,13 @@ package com.github.yuri6037.sje2d.render;
 
 import com.github.yuri6037.sje2d.asset.Font;
 import com.github.yuri6037.sje2d.asset.FontBitmap;
+import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.manager.AssetManagerProxy;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.util.UTF32Str;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 //CHECKSTYLE OFF: AvoidStarImport
@@ -45,6 +47,7 @@ public final class FontRender {
     private final AssetStore<Font>.Ref font;
 
     private final HashMap<Integer, AssetStore<FontBitmap>.Ref> bitmaps = new HashMap<>();
+    private final HashSet<AssetURL> queuedBitmaps = new HashSet<>();
 
     /**
      * Creates a new FontRender.
@@ -75,7 +78,11 @@ public final class FontRender {
         if (!bitmaps.containsKey(plane)) {
             AssetStore<FontBitmap>.Ref bitmap = assets.get(FontBitmap.class, font.get().getVirtualPath(plane));
             if (bitmap == null) {
-                assets.queue(font.get().getURL(c));
+                AssetURL url = font.get().getURL(c);
+                if (!queuedBitmaps.contains(url)) {
+                    assets.queue(url);
+                    queuedBitmaps.add(url);
+                }
                 return null;
             } else {
                 bitmaps.put(plane, bitmap);
@@ -120,12 +127,12 @@ public final class FontRender {
             }
             int cHeight = bitmap.get().getHeight();
             int cWidth = bitmap.get().getWidth(c);
-            width += (float) cWidth;
+            width += cWidth;
             if (cHeight > height) {
                 height = (float) cHeight;
             }
         }
-        return new Size(width, height);
+        return new Size(width, height + 12);
     }
 
     /**
@@ -137,9 +144,10 @@ public final class FontRender {
      * @return true if the string was rendered, false if some missing font bitmaps have been queued.
      */
     public boolean drawString(final AssetManagerProxy assets, final UTF32Str text, final float x, final float y) {
+        float blockSize = (float) font.get().getBlockSize();
+        glEnable(GL_TEXTURE_2D);
         boolean queued = false;
         Iterator<Integer> iter = text.iterator();
-        glBegin(GL_QUADS);
         float posx = x;
         while (iter.hasNext()) {
             int c = iter.next();
@@ -148,30 +156,30 @@ public final class FontRender {
                 queued = true;
                 continue;
             }
-            int height = bitmap.get().getHeight();
+            glBindTexture(GL_TEXTURE_2D, bitmap.get().getGLId());
             int width = bitmap.get().getWidth(c);
             int cPlane = c % 256;
             int gx = (cPlane % 16);
             int gy = (cPlane - gx) / 16;
-            float nWidth = (float) width / (float) font.get().getBlockSize();
-            float nHeight = (float) height / (float) font.get().getBlockSize();
-            float u = (float) gx / 16f + nWidth / 2f;
-            float v = (float) gy / 16f + nHeight / 2f;
-            float u1 = x + nWidth;
-            float v1 = y + nHeight;
+            float u = gx / 16f;
+            float v = gy / 16f;
+            //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 2 (WTF?!)
+            float u1 = u + 1 / 17f;
+            float v1 = v + 1 / 16f;
 
+            glBegin(GL_QUADS);
             glTexCoord2f(u, v);
             glVertex2f(posx, y);
-            glTexCoord2f(u, v1);
-            glVertex2f(posx, y + (float) height);
-            glTexCoord2f(u1, v1);
-            glVertex2f(posx + (float) width, y + (float) height);
             glTexCoord2f(u1, v);
-            glVertex2f(posx + (float) width, y);
+            glVertex2f(posx + blockSize, y);
+            glTexCoord2f(u1, v1);
+            glVertex2f(posx + blockSize, y + blockSize);
+            glTexCoord2f(u, v1);
+            glVertex2f(posx, y + blockSize);
+            glEnd();
 
             posx += (float) width;
         }
-        glEnd();
         return queued;
     }
 }

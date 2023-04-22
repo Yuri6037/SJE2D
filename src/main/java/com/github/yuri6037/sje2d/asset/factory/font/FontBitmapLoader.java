@@ -38,10 +38,12 @@ import com.github.yuri6037.sje2d.util.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -108,15 +110,17 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
             for (int j = 0; j != 16; ++j) {
                 byte[] arr = ByteBuffer.allocate(4).putInt(c).array();
                 String cs = new String(arr, Charset.forName("UTF-32"));
-                int cw = g2d.getFontMetrics().stringWidth(cs);
+                int cw = g2d.getFontMetrics().charWidth(c);
                 charWidth.put(c, cw);
-                int posx = j * blockSize + blockSize / 2 - cw / 2;
-                int posy = i * blockSize + blockSize / 2 - ch / 2;
+                int posx = j * blockSize;
+                //OpenGL 1.x somehow adds a constant offset of about 19 pixels in height to every bitmap element (WTF?!)
+                int posy = i * blockSize + 19;
                 g2d.drawString(cs, posx, posy);
                 ++c;
             }
         }
         buffer = ImageUtils.imageToBuffer(image);
+        ImageIO.write(image, "PNG", new File("./debug.png"));
         charHeight = ch;
         return Result.ready();
     }
