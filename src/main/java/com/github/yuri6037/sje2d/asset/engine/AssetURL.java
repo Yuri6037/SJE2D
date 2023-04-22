@@ -32,6 +32,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 public final class AssetURL {
     private final String mimeType;
@@ -221,5 +222,21 @@ public final class AssetURL {
             }
         }
         return url.toString();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        return toString().equals(o.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toString());
     }
 }
