@@ -38,12 +38,10 @@ import com.github.yuri6037.sje2d.util.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -120,7 +118,6 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
             }
         }
         buffer = ImageUtils.imageToBuffer(image);
-        ImageIO.write(image, "PNG", new File("./debug.png"));
         charHeight = ch;
         return Result.ready();
     }
