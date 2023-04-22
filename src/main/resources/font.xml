@@ -2,11 +2,11 @@
 <font xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
       xsi:schemaLocation="sje2d https://github.com/Yuri6037/SJE2D/blob/main/src/main/resources/font.xsd">
     <name>Default</name>
-    <width>1024</width>
+    <width>512</width>
     <base>
         <system>
             <family>Default</family>
-            <size>12</size>
+            <size>24</size>
             <italic>false</italic>
             <bold>false</bold>
         </system>
@@ -15,7 +15,7 @@
         <rule min="1F601" max="1F64F">
             <system>
                 <family>Noto</family>
-                <size>12</size>
+                <size>24</size>
                 <italic>false</italic>
                 <bold>false</bold>
             </system>
