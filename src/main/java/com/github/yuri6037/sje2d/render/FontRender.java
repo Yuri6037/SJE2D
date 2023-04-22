@@ -132,7 +132,7 @@ public final class FontRender {
                 height = (float) cHeight;
             }
         }
-        return new Size(width, height + 12);
+        return new Size(width, height);
     }
 
     /**
