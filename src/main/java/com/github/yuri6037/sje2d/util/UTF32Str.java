@@ -51,11 +51,18 @@ public class UTF32Str {
 
         @Override
         public Integer next() {
-            return buffer.getInt(index++);
+            //Java has broken naming: index does not actually mean index but instead means byte offset!!!
+            int c = buffer.getInt(index * 4);
+            ++index;
+            return c;
+        }
+
+        private void reset() {
+            index = 0;
         }
     }
 
-    private final byte[] bytes;
+    private final Iter iter;
 
     /**
      * Creates a new UTF-32 string.
@@ -63,13 +70,15 @@ public class UTF32Str {
      * @throws UnsupportedEncodingException if the UTF-32 encoding is not available on the current system.
      */
     public UTF32Str(final String str) throws UnsupportedEncodingException {
-        bytes = str.getBytes("UTF-32");
+        byte[] bytes = str.getBytes("UTF-32");
+        iter = new Iter(bytes);
     }
 
     /**
      * @return an iterator over the UTF-32 characters in this string.
      */
     public Iterator<Integer> iterator() {
-        return new Iter(bytes);
+        iter.reset();
+        return iter;
     }
 }
