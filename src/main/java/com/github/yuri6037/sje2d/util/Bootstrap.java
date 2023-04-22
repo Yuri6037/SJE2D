@@ -46,10 +46,18 @@ public final class Bootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(Bootstrap.class);
     private static final String BOOTSTRAP_PROP = "com.github.yuri6037.sje2d.bootstrap";
 
+    private static boolean isMacOS() {
+        String prop = System.getProperty("os.name", "unknown").toLowerCase();
+        return prop.contains("mac") || prop.contains("darwin");
+    }
+
     /**
      * @return true if the JVM was started on the main thread, false otherwise.
      */
     public static boolean isOnMainThread() {
+        if (!isMacOS()) {
+            return true; //No need of any GLFW hacks on other platforms
+        }
         long pid = LibC.getpid();
         return "1".equals(System.getenv("JAVA_STARTED_ON_FIRST_THREAD_" + pid))
                 && "true".equals(System.getProperty("java.awt.headless"));
@@ -59,6 +67,9 @@ public final class Bootstrap {
      * @return true if the JVM was started by the bootstrap, false otherwise.
      */
     public static boolean isBootstrapped() {
+        if (!isMacOS()) {
+            return true; //No need of any GLFW hacks on other platforms
+        }
         return "1".equals(System.getProperty(BOOTSTRAP_PROP));
     }
 
@@ -82,6 +93,9 @@ public final class Bootstrap {
      * @param args the program arguments.
      */
     public static void startOnMainThread(final String[] args) {
+        if (!isMacOS()) {
+            return; //No need of any GLFW hacks on other platforms
+        }
         //Arrays.asList is a peace of shit: it causes UnsupportedOperationException
         List<String> cmd = new ArrayList<>(Arrays.asList(System.getProperty("java.home") + File.separator
                 + "bin" + File.separator + "java", "-XstartOnFirstThread", "-Djava.awt.headless=true",
