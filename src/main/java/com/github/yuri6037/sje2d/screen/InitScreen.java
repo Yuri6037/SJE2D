@@ -29,27 +29,17 @@
 package com.github.yuri6037.sje2d.screen;
 
 import com.github.yuri6037.sje2d.Application;
-import com.github.yuri6037.sje2d.asset.Font;
 import com.github.yuri6037.sje2d.asset.Texture;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.render.Color;
-import com.github.yuri6037.sje2d.render.FontRender;
 import com.github.yuri6037.sje2d.render.Point;
-import com.github.yuri6037.sje2d.render.Size;
-import com.github.yuri6037.sje2d.util.UTF32Str;
-
-import java.io.UnsupportedEncodingException;
 
 public final class InitScreen extends BasicScreen {
-    private static final float SCALE_SPEED = 0.5f;
-    private static final float SCALE_LOW = 0.5f;
-    private static final float SCALE_HIGH = 1.5f;
+    private static final float SCALE_LOW = 0.0f;
+    private static final float SCALE_SPEED = -0.3f;
 
     private final AssetStore<Texture>.Ref texture;
-    private final FontRender font;
-    private final UTF32Str loadingText;
-    private float scale = 1.0f;
-    private float scaleF = 1.0f;
+    private float scale = 1.5f;
 
     /**
      * Creates a new BasicScreen.
@@ -58,12 +48,6 @@ public final class InitScreen extends BasicScreen {
     public InitScreen(final Application app) {
         super(app);
         texture = getAssets().get(Texture.class, "Engine/Texture/Init");
-        font = new FontRender(getAssets().get(Font.class, "Engine/Font/Default"));
-        try {
-            loadingText = new UTF32Str("Loading...");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -74,17 +58,13 @@ public final class InitScreen extends BasicScreen {
 
     @Override
     public void update(final float deltaTime) {
-        scale += scaleF * deltaTime;
-        if (scale >= SCALE_HIGH) {
-            scaleF = -SCALE_SPEED;
-        } else if (scale <= SCALE_LOW) {
-            scaleF = SCALE_SPEED;
+        scale += SCALE_SPEED * deltaTime;
+        if (scale <= SCALE_LOW) {
+            getApp().setScreen(null);
+            getApp().init();
         }
         getRender().setTexture(texture);
         getRender().setScale(scale);
         getRender().drawRect(width() / 2 - 256, height() / 2 - 256, 512, 512);
-        Size size = font.getStringSize(getAssets(), loadingText);
-        font.drawString(getAssets(), loadingText, width() - size.width(),
-                height() - size.height());
     }
 }

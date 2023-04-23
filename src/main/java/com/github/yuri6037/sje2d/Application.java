@@ -152,11 +152,7 @@ public class Application {
     protected void registerAssets() throws MalformedURLException {
     }
 
-    /**
-     * Called by run before the main loop.
-     * Override this function to customize the startup behavior of the application.
-     */
-    protected void onStart() {
+    private void onStart() {
         try {
             assets.queue(new AssetURL("texture/jpg resource://init.jpg?scope=engine&namespace=Engine&vpath=Init"));
             assets.queue(new AssetURL("font/xml resource://font.xml?scope=engine&namespace=Engine"));
@@ -169,13 +165,26 @@ public class Application {
     }
 
     /**
+     * Called once the game is ready to start executing.
+     * Override this function to customize the startup behavior of the application.
+     */
+    public void init() {
+
+    }
+
+    /**
      * Called by run after the main loop.
      * Override this function to customize the shutdown behavior of the application.
      */
-    protected void onTerminate() {
+    public void shutdown() {
+
+    }
+
+    private void onTerminate() {
         if (curScreen != null) {
             curScreen.close();
         }
+        shutdown();
     }
 
     /**
