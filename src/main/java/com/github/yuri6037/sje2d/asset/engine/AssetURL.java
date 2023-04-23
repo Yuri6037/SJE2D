@@ -185,10 +185,10 @@ public final class AssetURL {
     }
 
     /**
-     * @return an iterator over the query parameters in this URL.
+     * @return an iterator over the query parameters in this URL or null if no query params are present in this URL.
      */
     public Iterator<Map.Entry<String, String>> parameters() {
-        return queryParams.entrySet().iterator();
+        return queryParams == null ? null : queryParams.entrySet().iterator();
     }
 
     //CHECKSTYLE OFF: HiddenField

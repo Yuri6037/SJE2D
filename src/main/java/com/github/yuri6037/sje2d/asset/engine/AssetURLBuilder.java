@@ -46,6 +46,14 @@ public class AssetURLBuilder {
     }
 
     /**
+     * Creates a new AssetURLBuilder from a URL string.
+     * @param url the url string to parse.
+     */
+    public AssetURLBuilder(final String url) throws MalformedURLException {
+        this(new AssetURL(url));
+    }
+
+    /**
      * Creates a new AssetURLBuilder from an existing AssetURL.
      * @param url the url to clone into the new builder.
      */
@@ -54,9 +62,11 @@ public class AssetURLBuilder {
         protocol = url.getProtocol();
         path = url.getPath();
         Iterator<Map.Entry<String, String>> it = url.parameters();
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            params.put(entry.getKey(), entry.getValue());
+        if (it != null) {
+            while (it.hasNext()) {
+                Map.Entry<String, String> entry = it.next();
+                params.put(entry.getKey(), entry.getValue());
+            }
         }
     }
 
