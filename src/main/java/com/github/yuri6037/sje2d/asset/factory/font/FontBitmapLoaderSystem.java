@@ -29,7 +29,6 @@
 package com.github.yuri6037.sje2d.asset.factory.font;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.util.StringUtils;
 
 import java.awt.Font;
 
@@ -44,17 +43,8 @@ public final class FontBitmapLoaderSystem extends FontBitmapLoader {
 
     @Override
     protected Font buildFont() {
-        int charSize = Integer.parseInt(url.getParameter("size", "12"));
         String family = url.getPath();
-        boolean bold = StringUtils.parseBoolean(url.getParameter("bold"));
-        boolean italic = StringUtils.parseBoolean(url.getParameter("italic"));
-        int style = Font.PLAIN;
-        if (bold) {
-            style |= Font.BOLD;
-        }
-        if (italic) {
-            style |= Font.ITALIC;
-        }
-        return new Font(family, style, charSize);
+        //noinspection MagicConstant
+        return new Font(family, getFontStyle(), getFontSize());
     }
 }

@@ -35,6 +35,7 @@ import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.asset.engine.system.ITAssetLoader;
 import com.github.yuri6037.sje2d.util.ImageUtils;
 import com.github.yuri6037.sje2d.util.MathUtils;
+import com.github.yuri6037.sje2d.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +81,29 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
     private int charHeight;
     private final HashMap<Integer, Integer> charWidth = new HashMap<>();
     private ByteBuffer buffer;
+
+    /**
+     * @return the expected size in points of each character in the rendered bitmap.
+     */
+    protected int getFontSize() {
+        return Integer.parseInt(url.getParameter("size", "12"));
+    }
+
+    /**
+     * @return the expected style of each character in the rendered bitmap.
+     */
+    protected int getFontStyle() {
+        boolean bold = StringUtils.parseBoolean(url.getParameter("bold"));
+        boolean italic = StringUtils.parseBoolean(url.getParameter("italic"));
+        int style = Font.PLAIN;
+        if (bold) {
+            style |= Font.BOLD;
+        }
+        if (italic) {
+            style |= Font.ITALIC;
+        }
+        return style;
+    }
 
     @Override
     public final Result load(final AssetDepMap dependencies) throws Exception {

@@ -50,6 +50,7 @@ public final class FontBitmapLoaderTTF extends FontBitmapLoader {
 
     @Override
     protected Font buildFont() throws Exception {
-        return Font.createFont(Font.TRUETYPE_FONT, stream);
+        //noinspection MagicConstant
+        return Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(getFontStyle(), getFontSize());
     }
 }
