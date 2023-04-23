@@ -60,7 +60,7 @@ public final class InitScreen extends BasicScreen {
         texture = getAssets().get(Texture.class, "Engine/Texture/Init");
         font = new FontRender(getAssets().get(Font.class, "Engine/Font/Default"));
         try {
-            loadingText = new UTF32Str("你好，Loading 😀...");
+            loadingText = new UTF32Str("Loading...");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
