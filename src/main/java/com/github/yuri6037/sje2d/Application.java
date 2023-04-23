@@ -155,7 +155,6 @@ public class Application {
     private void onStart() {
         try {
             assets.queue(new AssetURL("texture/jpg resource://init.jpg?scope=engine&namespace=Engine&vpath=Init"));
-            assets.queue(new AssetURL("font/xml resource://font.xml?scope=engine&namespace=Engine"));
             syncAssetsManager();
             setScreen(new InitScreen(this));
             registerAssets();
