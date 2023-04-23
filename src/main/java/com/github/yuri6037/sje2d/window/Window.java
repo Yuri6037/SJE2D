@@ -79,7 +79,7 @@ public final class Window implements AutoCloseable {
     }
 
     /**
-     * Sets the input handler.
+     * Sets the input handler. Set to null to disable input handling.
      * @param handler the input handler to bind.
      */
     public void setInputHandler(final IInputHandler handler) {
