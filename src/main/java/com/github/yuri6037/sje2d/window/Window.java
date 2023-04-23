@@ -30,6 +30,7 @@ package com.github.yuri6037.sje2d.window;
 
 import com.github.yuri6037.sje2d.Application;
 import com.github.yuri6037.sje2d.input.Key;
+import com.github.yuri6037.sje2d.util.Bootstrap;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.Callback;
 import org.lwjgl.system.MemoryUtil;
@@ -102,7 +103,11 @@ public final class Window implements AutoCloseable {
     private void refreshGL(final int newWidth, final int newHeight) {
         width = newWidth;
         height = newHeight;
-        glViewport(0, 0, newWidth * 2, newHeight * 2);
+        if (Bootstrap.isMacOS()) {
+            glViewport(0, 0, newWidth * 2, newHeight * 2);
+        } else {
+            glViewport(0, 0, newWidth, newHeight);
+        }
         glPushMatrix();
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);

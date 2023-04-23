@@ -46,7 +46,10 @@ public final class Bootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(Bootstrap.class);
     private static final String BOOTSTRAP_PROP = "com.github.yuri6037.sje2d.bootstrap";
 
-    private static boolean isMacOS() {
+    /**
+     * @return true if the current running operating system is macOS.
+     */
+    public static boolean isMacOS() {
         String prop = System.getProperty("os.name", "unknown").toLowerCase();
         return prop.contains("mac") || prop.contains("darwin");
     }
