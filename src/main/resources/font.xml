@@ -4,21 +4,17 @@
     <name>Default</name>
     <width>512</width>
     <base>
-        <system>
+        <family>Default</family>
+        <size>24</size>
+        <italic>false</italic>
+        <bold>false</bold>
+    </base>
+    <rules>
+        <rule min="1F600" max="1F64F">
             <family>Default</family>
             <size>24</size>
             <italic>false</italic>
             <bold>false</bold>
-        </system>
-    </base>
-    <rules>
-        <rule min="1F601" max="1F64F">
-            <system>
-                <family>Noto</family>
-                <size>24</size>
-                <italic>false</italic>
-                <bold>false</bold>
-            </system>
         </rule>
     </rules>
 </font>

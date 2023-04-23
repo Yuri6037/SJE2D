@@ -37,9 +37,9 @@ import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import com.github.yuri6037.sje2d.asset.engine.system.ITAssetLoader;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
+import com.github.yuri6037.sje2d.config.BaseType;
 import com.github.yuri6037.sje2d.config.FontType;
 import com.github.yuri6037.sje2d.config.RuleType;
-import com.github.yuri6037.sje2d.config.SystemType;
 import com.github.yuri6037.sje2d.util.MathUtils;
 
 import javax.xml.bind.JAXBContext;
@@ -65,18 +65,37 @@ public final class FontLoader implements ITAssetLoader<Font> {
         this.url = url;
     }
 
-    private AssetURL loadRuleContent(final SystemType system, final String url1) throws Exception {
-        if (url1 != null) {
-            return new AssetURL("font-bitmap/ttf", url1);
-        } else if (system != null) {
-            return new AssetURLBuilder().protocol("none").mimeType("font-bitmap/system").path(system.getFamily())
-                    .parameter("size", system.getSize())
-                    .parameter("bold", system.getBold())
-                    .parameter("italic", system.getItalic())
-                    .build();
+    private AssetURL loadRuleContent(final RuleType rule, final BaseType base) throws Exception {
+        AssetURLBuilder builder;
+        if (rule.getUrl() != null) {
+            builder = new AssetURLBuilder(rule.getUrl()).mimeType("font-bitmap/ttf");
+        } else if (rule.getFamily() != null) {
+            builder = new AssetURLBuilder().protocol("none").mimeType("font-bitmap/system").path(rule.getFamily());
         } else {
             throw new IllegalArgumentException("Invalid rule type");
         }
+        return builder
+                .parameter("size", rule.getSize() != null ? rule.getSize().toString() : base.getSize().toString())
+                .parameter("bold", rule.isBold() != null
+                        ? String.valueOf(rule.isBold()) : String.valueOf(base.isBold()))
+                .parameter("italic", rule.isItalic() != null
+                        ? String.valueOf(rule.isItalic()) : String.valueOf(base.isItalic()))
+                .build();
+    }
+
+    private AssetURL loadBaseRule(final BaseType base) throws Exception {
+        AssetURLBuilder builder;
+        if (base.getUrl() != null) {
+            builder = new AssetURLBuilder(base.getUrl()).mimeType("font-bitmap/ttf");
+        } else if (base.getFamily() != null) {
+            builder = new AssetURLBuilder().protocol("none").mimeType("font-bitmap/system").path(base.getFamily());
+        } else {
+            throw new IllegalArgumentException("Invalid rule type");
+        }
+        return builder.parameter("size", base.getSize().toString())
+                .parameter("bold", String.valueOf(base.isBold()))
+                .parameter("italic", String.valueOf(base.isItalic()))
+                .build();
     }
 
     @Override
@@ -88,11 +107,11 @@ public final class FontLoader implements ITAssetLoader<Font> {
         if (!MathUtils.isPowerOfTwo(bitmapWidth)) {
             throw new IllegalArgumentException("Font bitmap width must be a power of 2");
         }
-        baseUrl = loadRuleContent(font.getBase().getSystem(), font.getBase().getUrl());
+        baseUrl = loadBaseRule(font.getBase());
         for (RuleType rule: font.getRules().getRule()) {
             int min = Integer.parseInt(rule.getMin(), 16);
             int max = Integer.parseInt(rule.getMax(), 16);
-            AssetURL url1 = loadRuleContent(rule.getSystem(), rule.getUrl());
+            AssetURL url1 = loadRuleContent(rule, font.getBase());
             rules.add(new Rule(min, max, url1));
         }
         return Result.ready();
