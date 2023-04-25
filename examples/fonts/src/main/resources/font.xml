@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<font xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
+      xsi:schemaLocation="sje2d https://github.com/Yuri6037/SJE2D/blob/main/src/main/resources/font.xsd">
+    <name>Default</name>
+    <width>512</width>
+    <base>
+        <family>Default</family>
+        <size>24</size>
+        <italic>false</italic>
+        <bold>false</bold>
+    </base>
+    <rules>
+        <rule min="1F600" max="1F64F">
+            <url>https://fonts.gstatic.com/s/notoemoji/v39/bMrnmSyK7YY-MEu6aWjPDs-ar6uWaGWuob_10jwv.ttf</url>
+            <size>20</size>
+            <italic>false</italic>
+            <bold>true</bold>
+        </rule>
+    </rules>
+</font>

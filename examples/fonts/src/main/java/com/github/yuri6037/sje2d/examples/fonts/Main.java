@@ -51,7 +51,7 @@ public final class Main extends Application {
 
     @Override
     protected void registerAssets() throws MalformedURLException {
-        getAssets().queue(new AssetURL("font/xml resource://font.xml?scope=engine&namespace=Engine"));
+        getAssets().queue(new AssetURL("font/xml resource://font.xml?namespace=Engine"));
     }
 
     @Override
