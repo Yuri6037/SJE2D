@@ -59,10 +59,16 @@ public final class Screen extends BasicScreen {
 
     @Override
     public void update(final float deltaTime) {
-        getRender().setColor(Color.WHITE);
-        fontRender.drawString(getAssets(), sampleText, 0, 0);
-        getRender().setColor(Color.RED);
+        fontRender.setShadowColor(new Color(255, 255, 255, 128));
+        fontRender.setTextColor(Color.WHITE);
+        fontRender.draw3DString(getAssets(), sampleText, 0, 0);
+        fontRender.setTextColor(Color.RED);
         Size size = fontRender.getStringSize(getAssets(), sampleText);
         fontRender.drawString(getAssets(), sampleText, width() - size.width(), height() - size.height());
+        fontRender.setRotation(45);
+        fontRender.setShadowColor(new Color(255, 0, 0, 128));
+        fontRender.draw3DString(getAssets(), sampleText, width() / 2 - size.width() / 2,
+                height() / 2 - size.height() / 2);
+        fontRender.setRotation(0.0f);
     }
 }

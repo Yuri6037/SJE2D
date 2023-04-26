@@ -49,6 +49,12 @@ public final class FontRender {
     private final HashMap<Integer, AssetStore<FontBitmap>.Ref> bitmaps = new HashMap<>();
     private final HashSet<AssetURL> queuedBitmaps = new HashSet<>();
 
+    private float rotation = 0.0f;
+
+    private float offset3d = 2.0f;
+    private Color shadowColor = new Color(0, 0, 0, 128);
+    private Color textColor = Color.WHITE;
+
     /**
      * Creates a new FontRender.
      * @param font the font to use for drawing text.
@@ -71,6 +77,39 @@ public final class FontRender {
             }
         }
         return true;
+    }
+
+    /**
+     * Sets the rotation to apply to all future drawString and draw3DString operations.
+     * @param rotation the new rotation angle in degrees.
+     */
+    public void setRotation(final float rotation) {
+        this.rotation = rotation;
+    }
+
+    /**
+     * Sets the shadow color to apply to all future draw3DString operations.
+     * @param color the new color.
+     */
+    public void setShadowColor(final Color color) {
+        shadowColor = color;
+    }
+
+    /**
+     * Sets the color to apply to all future drawString and draw3DString operations.
+     * @param color the new text color.
+     */
+    public void setTextColor(final Color color) {
+        textColor = color;
+        glColor4f(textColor.r(), textColor.g(), textColor.b(), textColor.a());
+    }
+
+    /**
+     * Sets the offset of the shadow to apply to all future draw3DString operations.
+     * @param offset the new offset.
+     */
+    public void set3DOffset(final float offset) {
+        offset3d = offset;
     }
 
     private AssetStore<FontBitmap>.Ref getBitmap(final AssetManagerProxy assets, final int c) {
@@ -167,6 +206,13 @@ public final class FontRender {
             float u1 = u + 1 / 17f;
             float v1 = v + 1 / 17f;
 
+            if (rotation != 0.0f) {
+                glPushMatrix();
+                glTranslatef(x, y, 0);
+                glRotatef(rotation, 0, 0, 1);
+                glTranslatef(-x, -y, 0);
+            }
+
             glBegin(GL_QUADS);
             glTexCoord2f(u, v);
             glVertex2f(posx, y);
@@ -178,8 +224,28 @@ public final class FontRender {
             glVertex2f(posx, y + blockSize);
             glEnd();
 
+            if (rotation != 0.0f) {
+                glPopMatrix();
+            }
+
             posx += (float) width;
         }
         return queued;
+    }
+
+    /**
+     * Draws a 3D-like string on the screen.
+     * @param assets a pointer to the asset system to queue bitmap assets on demand.
+     * @param text the target string to render.
+     * @param x x coordinate.
+     * @param y y coordinate.
+     * @return true if the string was rendered, false if some missing font bitmaps have been queued.
+     */
+    public boolean draw3DString(final AssetManagerProxy assets, final UTF32Str text, final float x, final float y) {
+        glColor4f(textColor.r(), textColor.g(), textColor.b(), textColor.a());
+        boolean flag = drawString(assets, text, x, y);
+        glColor4f(shadowColor.r(), shadowColor.g(), shadowColor.b(), shadowColor.a());
+        drawString(assets, text, x + offset3d, y + offset3d * 2);
+        return flag;
     }
 }
