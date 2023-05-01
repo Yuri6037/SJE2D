@@ -35,13 +35,16 @@ public interface IAssetLoader {
     class Result {
         private final String[] dependencies;
         private final boolean isFinished;
+        private final boolean isNone;
 
-        private Result(final boolean isFinished, final String[] dependencies) {
+        private Result(final boolean isFinished, final boolean isNone, final String[] dependencies) {
             this.dependencies = dependencies;
             this.isFinished = isFinished;
+            this.isNone = isNone;
         }
 
-        private static final Result READY = new Result(true, null);
+        private static final Result READY = new Result(true, false, null);
+        private static final Result NONE = new Result(true, true, null);
 
         /**
          * Creates a new result to signal a lack of dependency to continue.
@@ -49,7 +52,7 @@ public interface IAssetLoader {
          * @return the new result.
          */
         public static Result needsDependencies(final String[] dependencies) {
-            return new Result(false, dependencies);
+            return new Result(false, false, dependencies);
         }
 
         /**
@@ -61,10 +64,25 @@ public interface IAssetLoader {
         }
 
         /**
+         * Creates a new result which ends loading but indicates to the solver that this loader does not produce assets.
+         * @return a new result.
+         */
+        public static Result none() {
+            return NONE;
+        }
+
+        /**
          * @return true if the loader is finished, false otherwise
          */
         public boolean isReady() {
             return isFinished;
+        }
+
+        /**
+         * @return true if the loader will not produce any asset, false otherwise
+         */
+        public boolean isNone() {
+            return isNone;
         }
 
         /**

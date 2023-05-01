@@ -91,6 +91,10 @@ final class AssetSchedulerThread implements Runnable {
                     queue.remove(i);
                     try {
                         AssetLoadTask res = item.get();
+                        if (res.isNone()) {
+                            LOGGER.info("Dropped asset '{}': loader won't produce any asset", res);
+                            continue;
+                        }
                         AssetLoadTask.Result res1 = res.tryFinish();
                         if (res1 != null) {
                             LOGGER.info("Loaded asset '{}'", res);

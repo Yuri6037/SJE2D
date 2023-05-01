@@ -70,6 +70,10 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
         return new Result(loader, deps.toSet());
     }
 
+    public boolean isNone() {
+        return lastResult.isReady() && lastResult.isNone();
+    }
+
     public boolean isAlive() {
         return loader != null && ttl > 0;
     }
