@@ -71,7 +71,7 @@ class AssetLoadTask implements Callable<AssetLoadTask> {
     }
 
     public boolean isNone() {
-        return lastResult.isReady() && lastResult.isNone();
+        return lastResult != null && lastResult.isReady() && lastResult.isNone();
     }
 
     public boolean isAlive() {
