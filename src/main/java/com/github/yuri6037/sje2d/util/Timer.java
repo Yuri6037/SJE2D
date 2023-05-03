@@ -32,16 +32,17 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Timer {
     private float deltaTime;
-    private double frameTime;
+    private double time;
+    private float incTime = 0.0f;
     private float speed = 1.0f;
-    private int instaTicks = 0;
-    private int lastTicks = 0;
+    private int frames = 0;
+    private int lastFrames = 0;
 
     /**
      * Creates a new timer.
      */
     public Timer() {
-        frameTime = glfwGetTime();
+        time = glfwGetTime();
     }
 
     /**
@@ -53,10 +54,10 @@ public class Timer {
     }
 
     /**
-     * @return the time in seconds of the last frame.
+     * @return the time in seconds since the start of the application.
      */
-    public double getFrameTime() {
-        return frameTime;
+    public double getTime() {
+        return time;
     }
 
     /**
@@ -75,10 +76,10 @@ public class Timer {
     }
 
     /**
-     * @return the number of ticks/frames per second.
+     * @return the number of frames per second.
      */
-    public int getTicksPerSecond() {
-        return lastTicks;
+    public int getFPS() {
+        return lastFrames;
     }
 
     /**
@@ -88,14 +89,16 @@ public class Timer {
      * unless you know what you're doing.
      */
     public void update() {
-        double time = glfwGetTime();
-        double diff = time - frameTime;
+        double now = glfwGetTime();
+        double diff = now - time;
         deltaTime = (float) diff * speed;
-        frameTime = time;
-        ++instaTicks;
-        if (diff >= 1.0) {
-            lastTicks = instaTicks;
-            instaTicks = 0;
+        time = now;
+        ++frames;
+        incTime += diff;
+        if (incTime >= 1.0) {
+            lastFrames = frames;
+            frames = 0;
+            incTime = 0.0f;
         }
     }
 }

@@ -28,31 +28,40 @@
 
 package com.github.yuri6037.sje2d.asset;
 
+import com.github.yuri6037.sje2d.render.Rect;
+import com.github.yuri6037.sje2d.util.Timer;
+
 import java.nio.ByteBuffer;
 
 public class Animation extends Texture {
+    private final int frameWidth;
     private final int frameHeight;
-    private final int fps;
+    private final int frameCount;
+    private final int numRows;
+    private final int height;
+    private final int width;
+    private final double fps;
 
     /**
      * Creates a new texture from a buffer and its size.
      * @param buffer the buffer containing all texel data.
-     * @param width  the texture width.
-     * @param height the texture height.
-     * @param fps the number of FPS of the new animation.
+     * @param frameWidth the width of a single animation frame.
      * @param frameHeight the height of a single animation frame.
+     * @param fps the number of FPS of the new animation.
+     * @param numRows the number of rows in the animation bitmap.
+     * @param numColumns the number of columns in the animation bitmap.
+     * @param frameCount the number of frames in the animation.
      */
-    public Animation(final ByteBuffer buffer, final int width, final int height, final int fps, final int frameHeight) {
-        super(buffer, width, height);
-        this.fps = fps;
+    public Animation(final ByteBuffer buffer, final int frameWidth, final int frameHeight, final int fps,
+                     final int numRows, final int numColumns, final int frameCount) {
+        super(buffer, frameWidth * numColumns, frameHeight * numRows);
+        this.fps = (double) fps;
         this.frameHeight = frameHeight;
-    }
-
-    /**
-     * @return the target number of FPS.
-     */
-    public int getFps() {
-        return fps;
+        this.frameWidth = frameWidth;
+        this.numRows = numRows;
+        this.frameCount = frameCount;
+        this.height = frameHeight * numRows;
+        this.width = frameWidth * numColumns;
     }
 
     /**
@@ -60,5 +69,29 @@ public class Animation extends Texture {
      */
     public int getFrameHeight() {
         return frameHeight;
+    }
+
+    /**
+     * @return the width of a single animation frame.
+     */
+    public int getFrameWidth() {
+        return frameWidth;
+    }
+
+    /**
+     * Gets the frame rectangle for the current frame.
+     * @param timer the application timer.
+     * @return the rectangle to apply to render only the corresponding animation frame.
+     */
+    public Rect getFrameRect(final Timer timer) {
+        double correctedFrame = timer.getTime() * fps;
+        int frame = (int) correctedFrame % frameCount;
+        int gridx = frame / numRows;
+        int gridy = frame % numRows;
+        float x = ((float) gridx * (float) frameWidth) / (float) width;
+        float y = ((float) gridy * (float) frameHeight) / (float) height;
+        float w = (float) frameWidth / (float) width;
+        float h = (float) frameHeight / (float) height;
+        return Rect.fromXYWH(x, y, w, h);
     }
 }

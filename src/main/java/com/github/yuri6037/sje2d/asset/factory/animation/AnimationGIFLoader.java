@@ -35,6 +35,7 @@ import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.asset.factory.BaseLoader;
 import com.github.yuri6037.sje2d.util.ImageUtils;
+import com.github.yuri6037.sje2d.util.MathUtils;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -49,12 +50,15 @@ import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
 public final class AnimationGIFLoader extends BaseLoader<Animation> {
+    private static final int MAX_TEXTURE_SIZE = 8192;
     private final InputStream stream;
     private final ArrayList<BufferedImage> frames = new ArrayList<>();
     private int width = 0;
     private int height = 0;
     private ByteBuffer buffer;
     private int fps = 30;
+    private int numColumns;
+    private int numRows;
 
     /**
      * Creates a new animation GIF loader.
@@ -70,13 +74,23 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
         if (frames.isEmpty() || width == 0 || height == 0) {
             return null;
         }
-        BufferedImage output = new BufferedImage(width,
-                height * frames.size(), BufferedImage.TYPE_INT_ARGB);
+        if (!MathUtils.isPowerOfTwo(width) || !MathUtils.isPowerOfTwo(height)) {
+            throw new IllegalArgumentException("Animation frame size is not a power of 2");
+        }
+        numColumns = (int) Math.ceil((double) (height * frames.size()) / (double) MAX_TEXTURE_SIZE);
+        numRows = Math.min(frames.size(), MAX_TEXTURE_SIZE / height);
+        BufferedImage output = new BufferedImage(numColumns * width, numRows * height,
+                BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = output.createGraphics();
+        int x = 0;
         int y = 0;
         for (BufferedImage frame: frames) {
-            graphics.drawImage(frame, 0, y, null);
+            graphics.drawImage(frame, x, y, null);
             y += height;
+            if (y >= MAX_TEXTURE_SIZE) {
+                y = 0;
+                x += width;
+            }
         }
         return output;
     }
@@ -100,7 +114,9 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
                     BufferedImage.TYPE_INT_ARGB);
             Graphics2D graphics = frame1.createGraphics();
             if (frame != null) {
-                graphics.drawImage(frame, 0, 0, null);
+                int reAlignedX = brokenFrame.getWidth() / 2 - frame.getWidth() / 2;
+                int reAlignedY = brokenFrame.getHeight() / 2 - frame.getHeight() / 2;
+                graphics.drawImage(frame, reAlignedX, reAlignedY, null);
             }
             graphics.drawImage(brokenFrame, 0, 0, null);
             frames.add(frame1);
@@ -118,7 +134,7 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
 
     @Override
     protected Animation createAsset() {
-        Animation animation = new Animation(buffer, width, height, fps, height / frames.size());
+        Animation animation = new Animation(buffer, width, height, fps, numRows, numColumns, frames.size());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
