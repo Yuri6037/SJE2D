@@ -76,6 +76,9 @@ public final class Window implements AutoCloseable {
         if (config.isVsync()) {
             setVsync(true);
         }
+        int[] value = new int[1];
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, value);
+        LOGGER.info("Maximum texture size: {}", value[0]);
     }
 
     /**
