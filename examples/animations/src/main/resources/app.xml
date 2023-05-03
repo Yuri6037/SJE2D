@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
+     xsi:schemaLocation="sje2d https://raw.githubusercontent.com/Yuri6037/SJE2D/main/src/main/resources/app.xsd">
+    <name>Example App</name>
+    <version>0.0.1</version>
+    <display>
+        <width>1024</width>
+        <height>768</height>
+        <fullscreen>false</fullscreen>
+        <vsync>true</vsync>
+    </display>
+    <input>
+        <use-mouse>false</use-mouse>
+        <use-keyboard>false</use-keyboard>
+        <use-joystick>false</use-joystick>
+        <bindings>
+        </bindings>
+        <axes>
+        </axes>
+    </input>
+    <assets>
+        <registry>
+            <factory>com.github.yuri6037.sje2d.asset.factory.AnimationGIFFactory</factory>
+            <factory>com.github.yuri6037.sje2d.asset.factory.ImageTextureFactory</factory>
+            <protocol>com.github.yuri6037.sje2d.asset.protocol.ResourceProtocol</protocol>
+            <protocol>com.github.yuri6037.sje2d.asset.protocol.FileProtocol</protocol>
+            <protocol>com.github.yuri6037.sje2d.asset.protocol.HttpProtocol</protocol>
+            <protocol>com.github.yuri6037.sje2d.asset.protocol.HttpsProtocol</protocol>
+            <protocol>com.github.yuri6037.sje2d.asset.protocol.NoneProtocol</protocol>
+        </registry>
+    </assets>
+</app>
