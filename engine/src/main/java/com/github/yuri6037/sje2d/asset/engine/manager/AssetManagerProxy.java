@@ -45,10 +45,10 @@ public class AssetManagerProxy {
     private final ArrayBlockingQueue<Command> channel;
     private final AtomicInteger opCount;
 
+    @SuppressWarnings("unchecked")
     private static <T extends IAsset> AssetStore<T> tryCast(final Class<T> c, final AssetStore<?> store) {
         try {
             c.cast(store.getAsset());
-            //noinspection unchecked
             return (AssetStore<T>) store;
         } catch (ClassCastException e) {
             return null;

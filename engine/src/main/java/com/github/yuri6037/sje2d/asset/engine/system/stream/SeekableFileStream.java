@@ -33,7 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public final class SeekableFileStream implements IAssetStream, ISeekableAssetStream {
+public final class SeekableFileStream implements ISeekableAssetStream {
     private final RandomAccessFile stream;
 
     /**
