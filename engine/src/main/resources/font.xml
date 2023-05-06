@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <font xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="sje2d"
-      xsi:schemaLocation="sje2d https://github.com/Yuri6037/SJE2D/blob/main/src/main/resources/font.xsd">
+      xsi:schemaLocation="sje2d https://raw.githubusercontent.com/Yuri6037/SJE2D/main/src/main/resources/font.xsd">
     <name>Default</name>
     <width>512</width>
     <base>
