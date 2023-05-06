@@ -41,6 +41,7 @@
                     <sources>
                         <source>src/main/resources/app.xsd</source>
                         <source>src/main/resources/font.xsd</source>
+                        <source>src/main/resources/animation.xsd</source>
                     </sources>
                 </configuration>
             </plugin>

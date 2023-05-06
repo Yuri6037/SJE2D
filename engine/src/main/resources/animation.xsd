@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="sje2d" xmlns="sje2d"
+           attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:element name="animation" type="animationType"/>
+  <xs:complexType name="framesType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="frame" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="animationType">
+    <xs:sequence>
+      <xs:element type="xs:positiveInteger" name="fps"/>
+      <xs:element type="xs:positiveInteger" name="width"/>
+      <xs:element type="xs:positiveInteger" name="height"/>
+      <xs:element type="framesType" name="frames"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
