@@ -28,7 +28,7 @@
 
 package com.github.yuri6037.sje2d.window;
 
-final class AxisKey {
+public final class AxisKey {
     /**
      * The key that represents the mouse cursor X and Y position in the window.
      */
