@@ -28,37 +28,18 @@
 
 package com.github.yuri6037.sje2d.asset.factory.animation;
 
-import com.github.yuri6037.sje2d.asset.Animation;
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
-import com.github.yuri6037.sje2d.asset.factory.BaseLoader;
-import com.github.yuri6037.sje2d.util.ImageUtils;
-import com.github.yuri6037.sje2d.util.MathUtils;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
-//CHECKSTYLE OFF: AvoidStarImport
-import static org.lwjgl.opengl.GL11.*;
-//CHECKSTYLE ON
-
-public final class AnimationGIFLoader extends BaseLoader<Animation> {
-    private static final int MAX_TEXTURE_SIZE = 8192;
+public final class AnimationGIFLoader extends AnimationLoader {
     private final InputStream stream;
-    private final ArrayList<BufferedImage> frames = new ArrayList<>();
-    private int width = 0;
-    private int height = 0;
-    private ByteBuffer buffer;
-    private int fps = 30;
-    private int numColumns;
-    private int numRows;
 
     /**
      * Creates a new animation GIF loader.
@@ -70,33 +51,8 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
         this.stream = StreamUtils.makeInputStream(stream);
     }
 
-    private BufferedImage genBitmap() {
-        if (frames.isEmpty() || width == 0 || height == 0) {
-            return null;
-        }
-        if (!MathUtils.isPowerOfTwo(width) || !MathUtils.isPowerOfTwo(height)) {
-            throw new IllegalArgumentException("Animation frame size is not a power of 2");
-        }
-        numColumns = (int) Math.ceil((double) (height * frames.size()) / (double) MAX_TEXTURE_SIZE);
-        numRows = Math.min(frames.size(), MAX_TEXTURE_SIZE / height);
-        BufferedImage output = new BufferedImage(numColumns * width, numRows * height,
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics = output.createGraphics();
-        int x = 0;
-        int y = 0;
-        for (BufferedImage frame: frames) {
-            graphics.drawImage(frame, x, y, null);
-            y += height;
-            if (y >= MAX_TEXTURE_SIZE) {
-                y = 0;
-                x += width;
-            }
-        }
-        return output;
-    }
-
     @Override
-    public Result load(final AssetDepMap dependencies) throws Exception {
+    protected void build() throws Exception {
         ImageReader reader = ImageIO.getImageReadersBySuffix("gif").next();
         BufferedImage frame = null;
         reader.setInput(ImageIO.createImageInputStream(stream));
@@ -104,11 +60,11 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
         int max = reader.getNumImages(true);
         while (i < max) {
             BufferedImage brokenFrame = reader.read(i);
-            if (width < brokenFrame.getWidth()) {
-                width = brokenFrame.getWidth();
+            if (frameWidth < brokenFrame.getWidth()) {
+                frameWidth = brokenFrame.getWidth();
             }
-            if (height < brokenFrame.getHeight()) {
-                height = brokenFrame.getHeight();
+            if (frameHeight < brokenFrame.getHeight()) {
+                frameHeight = brokenFrame.getHeight();
             }
             BufferedImage frame1 = new BufferedImage(brokenFrame.getWidth(), brokenFrame.getHeight(),
                     BufferedImage.TYPE_INT_ARGB);
@@ -123,22 +79,6 @@ public final class AnimationGIFLoader extends BaseLoader<Animation> {
             frame = frame1;
             ++i;
         }
-        BufferedImage bitmap = genBitmap();
-        if (bitmap == null) {
-            return Result.none();
-        }
-        buffer = ImageUtils.imageToBuffer(bitmap);
         fps = Integer.parseInt(url.getParameter("fps", "30"));
-        return Result.ready();
-    }
-
-    @Override
-    protected Animation createAsset() {
-        Animation animation = new Animation(buffer, width, height, fps, numRows, numColumns, frames.size());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        return animation;
     }
 }

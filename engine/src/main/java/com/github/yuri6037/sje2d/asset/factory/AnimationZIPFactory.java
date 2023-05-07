@@ -26,45 +26,22 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package com.github.yuri6037.sje2d.examples.animations;
+package com.github.yuri6037.sje2d.asset.factory;
 
-import com.github.yuri6037.sje2d.Application;
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.config.AppType;
-import com.github.yuri6037.sje2d.window.WindowException;
+import com.github.yuri6037.sje2d.asset.engine.system.IAssetFactory;
+import com.github.yuri6037.sje2d.asset.engine.system.IAssetLoader;
+import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
+import com.github.yuri6037.sje2d.asset.factory.animation.AnimationZIPLoader;
 
-import java.net.MalformedURLException;
-
-public final class Main extends Application {
-    /**
-     * Creates a new application.
-     * This class is not intended for direct instantiation, it should instead be
-     * instanced by "Application.main".
-     *
-     * @param config the application configuration
-     * @throws WindowException if the window could not be created or that OpenGL
-     *                         failed to initialize.
-     */
-    public Main(final AppType config) throws WindowException {
-        super(config);
+public final class AnimationZIPFactory implements IAssetFactory {
+    @Override
+    public IAssetLoader create(final IAssetStream stream, final AssetURL url) throws Exception {
+        return new AnimationZIPLoader(stream, url);
     }
 
     @Override
-    protected void registerAssets() throws MalformedURLException {
-        getAssets().queue(new AssetURL("animation/gif resource://loading.gif"));
-        getAssets().queue(new AssetURL("animation/zip resource://basic.zip"));
-    }
-
-    @Override
-    public void init() {
-        setScreen(new Screen(this));
-    }
-
-    /**
-     * Main function.
-     * @param args arguments.
-     */
-    public static void main(final String[] args) {
-        Application.main(Main.class, args);
+    public String getMimeType() {
+        return "animation/zip";
     }
 }

@@ -36,6 +36,7 @@ import com.github.yuri6037.sje2d.screen.BasicScreen;
 
 public final class Screen extends BasicScreen {
     private final AssetStore<Animation>.Ref animation;
+    private final AssetStore<Animation>.Ref basic;
 
     /**
      * Creates a new BasicScreen.
@@ -45,14 +46,19 @@ public final class Screen extends BasicScreen {
     public Screen(final Application app) {
         super(app);
         animation = getAssets().get(Animation.class, "Animation/loading");
+        basic = getAssets().get(Animation.class, "Animation/basic");
     }
 
     @Override
     public void update(final float deltaTime) {
         getRender().setColor(Color.WHITE);
+
         getRender().setTexture(animation.get());
-        //getRender().setTextureRect(Rect.fromXYWH(0, 0, 1, 0.1f));
         getRender().setTextureRect(animation.get().getFrameRect(getApp().getTimer()));
         getRender().drawRect(width() / 2 - 128, height() / 2 - 128, 256, 256);
+
+        getRender().setTexture(basic.get());
+        getRender().setTextureRect(basic.get().getFrameRect(getApp().getTimer()));
+        getRender().drawRect(0, 0, 256, 256);
     }
 }
