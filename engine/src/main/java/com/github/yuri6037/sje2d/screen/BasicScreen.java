@@ -31,6 +31,7 @@ package com.github.yuri6037.sje2d.screen;
 import com.github.yuri6037.sje2d.Application;
 import com.github.yuri6037.sje2d.asset.engine.manager.AssetManagerProxy;
 import com.github.yuri6037.sje2d.render.Render;
+import com.github.yuri6037.sje2d.util.Timer;
 
 public abstract class BasicScreen implements IScreen {
     private final Render render = new Render();
@@ -70,6 +71,13 @@ public abstract class BasicScreen implements IScreen {
      */
     protected Render getRender() {
         return render;
+    }
+
+    /**
+     * @return the application timer.
+     */
+    protected Timer getTimer() {
+        return getApp().getTimer();
     }
 
     /**

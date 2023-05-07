@@ -206,7 +206,7 @@ public class Application {
             timer.update();
             manager.update();
             if (curScreen != null) {
-                curScreen.update(timer.getDeltaTime());
+                curScreen.update();
             }
             window.update();
         }

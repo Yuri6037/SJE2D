@@ -58,7 +58,7 @@ public final class Screen extends BasicScreen {
     }
 
     @Override
-    public void update(final float deltaTime) {
+    public void update() {
         fontRender.setShadowColor(new Color(255, 255, 255, 128));
         fontRender.setTextColor(Color.WHITE);
         fontRender.draw3DString(getAssets(), sampleText, 0, 0);

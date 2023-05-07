@@ -31,9 +31,8 @@ package com.github.yuri6037.sje2d.screen;
 public interface IScreen {
     /**
      * Called each frame.
-     * @param deltaTime the delta time (in seconds) between the last frame and the current frame.
      */
-    void update(float deltaTime);
+    void update();
 
     /**
      * Called when the screen is closed.

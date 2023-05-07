@@ -57,8 +57,8 @@ public final class InitScreen extends BasicScreen {
     }
 
     @Override
-    public void update(final float deltaTime) {
-        scale += SCALE_SPEED * deltaTime;
+    public void update() {
+        scale += SCALE_SPEED * getTimer().getDeltaTime();
         if (scale <= SCALE_LOW) {
             getApp().setScreen(null);
             getApp().init();

@@ -46,6 +46,6 @@ public final class Screen extends BasicScreen {
     }
 
     @Override
-    public void update(final float deltaTime) {
+    public void update() {
     }
 }

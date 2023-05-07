@@ -50,15 +50,15 @@ public final class Screen extends BasicScreen {
     }
 
     @Override
-    public void update(final float deltaTime) {
+    public void update() {
         getRender().setColor(Color.WHITE);
 
         getRender().setTexture(animation.get());
-        getRender().setTextureRect(animation.get().getFrameRect(getApp().getTimer()));
+        getRender().setTextureRect(animation.get().getFrameRect(getTimer()));
         getRender().drawRect(width() / 2 - 128, height() / 2 - 128, 256, 256);
 
         getRender().setTexture(basic.get());
-        getRender().setTextureRect(basic.get().getFrameRect(getApp().getTimer()));
+        getRender().setTextureRect(basic.get().getFrameRect(getTimer()));
         getRender().drawRect(0, 0, 256, 256);
     }
 }
