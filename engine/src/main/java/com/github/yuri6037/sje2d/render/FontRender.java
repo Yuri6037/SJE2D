@@ -203,7 +203,7 @@ public final class FontRender {
             int gx = (cPlane % 16);
             int gy = (cPlane - gx) / 16;
             float u = gx / 16f;
-            float v = gy / 16f;
+            float v = gy / 16f - 0.005f;
             //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 2 (WTF?!)
             float u1 = u + 1 / 17f;
             float v1 = v + 1 / 17f;
