@@ -28,39 +28,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.github.yuri6037.sje2d.util;
-
-public final class MathUtils {
-    private MathUtils() {
-    }
-
-    /**
-     * Checks if the given number is a power of 2 using bitwise and. This function returns false when the value is 0.
-     * @param value the number to check.
-     * @return true if value is a power of 2, false otherwise
-     */
-    public static boolean isPowerOfTwo(final int value) {
-        if (value == 0) {
-            return false;
-        }
-        return (value & (value - 1)) == 0;
-    }
-
-    /**
-     * Clamps the given number.
-     * @param <T> the type of number to clamp.
-     * @param a the number to clamp.
-     * @param min the minimum value.
-     * @param max the maximum value.
-     * @return the clamped value.
-     */
-    public static <T extends Comparable<T>> T clamp(final T a, final T min, final T max) {
-        if (a.compareTo(min) < 0) {
-            return min;
-        }
-        if (a.compareTo(max) > 0) {
-            return max;
-        }
-        return a;
-    }
-}
+ /**
+  * This module contains basic math utilities.
+  */
+ package com.github.yuri6037.sje2d.math;
