@@ -42,7 +42,7 @@ import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.config.BaseType;
 import com.github.yuri6037.sje2d.config.FontType;
 import com.github.yuri6037.sje2d.config.RuleType;
-import com.github.yuri6037.sje2d.util.MathUtils;
+import com.github.yuri6037.sje2d.math.MathUtils;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.transform.stream.StreamSource;

@@ -28,7 +28,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.github.yuri6037.sje2d.util;
+package com.github.yuri6037.sje2d.math;
 
 public final class MathUtils {
     private MathUtils() {
