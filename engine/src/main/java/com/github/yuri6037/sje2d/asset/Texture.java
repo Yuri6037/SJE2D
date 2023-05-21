@@ -39,6 +39,11 @@ import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
 public class Texture implements IAsset {
+    /**
+     * Hack to allow calling setTexture(null) without getting bullshit ambiguous errors from Java.
+     */
+    public static final Texture NULL = null;
+
     private final int id;
 
     /**
