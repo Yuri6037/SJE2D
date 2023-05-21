@@ -34,6 +34,7 @@ import com.github.yuri6037.sje2d.window.IInputHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public final class InputSystem implements IInputHandler {
     private final HashSet<Key> keyStates = new HashSet<>();
@@ -139,7 +140,11 @@ public final class InputSystem implements IInputHandler {
 
     @Override
     public void onAxisUpdate(final String key, final float x, final float y, final float z) {
-        for (Axis axis: config.getAxesForKey(key)) {
+        List<Axis> axes = config.getAxesForKey(key);
+        if (axes == null) {
+            return;
+        }
+        for (Axis axis: axes) {
             axis.setX(x);
             axis.setY(y);
             axis.setZ(z);
@@ -149,7 +154,11 @@ public final class InputSystem implements IInputHandler {
     @Override
     public void onKeyPress(final Key key) {
         keyStates.add(key);
-        for (Binding binding: config.getBindingsForKey(key)) {
+        List<Binding> bindings = config.getBindingsForKey(key);
+        if (bindings == null) {
+            return;
+        }
+        for (Binding binding: bindings) {
             Runnable run = pressBindings.get(binding);
             if (run != null) {
                 run.run();
@@ -160,7 +169,11 @@ public final class InputSystem implements IInputHandler {
     @Override
     public void onKeyRelease(final Key key) {
         keyStates.remove(key);
-        for (Binding binding: config.getBindingsForKey(key)) {
+        List<Binding> bindings = config.getBindingsForKey(key);
+        if (bindings == null) {
+            return;
+        }
+        for (Binding binding: bindings) {
             Runnable run = releaseBindings.get(binding);
             if (run != null) {
                 run.run();
