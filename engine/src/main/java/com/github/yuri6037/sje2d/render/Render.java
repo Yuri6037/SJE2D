@@ -90,6 +90,10 @@ public final class Render {
      * @param texture the texture object instance.
      */
     public void setTexture(final Texture texture) {
+        if (texture == null) {
+            glDisable(GL_TEXTURE_2D);
+            return;
+        }
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture.getGLId());
     }
