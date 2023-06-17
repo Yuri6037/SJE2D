@@ -48,7 +48,7 @@ public abstract class InputScreen extends BasicScreen {
     /**
      * @return the InputSystem of this screen.
      */
-    protected InputSystem getInput() {
+    protected final InputSystem getInput() {
         return inputSystem;
     }
 

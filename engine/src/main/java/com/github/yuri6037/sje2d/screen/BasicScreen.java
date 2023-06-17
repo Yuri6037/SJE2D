@@ -50,42 +50,42 @@ public abstract class BasicScreen implements IScreen {
     /**
      * @return the window width.
      */
-    protected float width() {
+    protected final float width() {
         return app.getWindow().getWidth();
     }
 
     /**
      * @return the window height.
      */
-    protected float height() {
+    protected final float height() {
         return app.getWindow().getHeight();
     }
 
     /**
      * @return the Application this screen is attached to.
      */
-    protected Application getApp() {
+    protected final Application getApp() {
         return app;
     }
 
     /**
      * @return an instance of the 2D rendering engine.
      */
-    protected Render getRender() {
+    protected final Render getRender() {
         return render;
     }
 
     /**
      * @return the application timer.
      */
-    protected Timer getTimer() {
+    protected final Timer getTimer() {
         return getApp().getTimer();
     }
 
     /**
      * @return the AssetManagerProxy.
      */
-    protected AssetManagerProxy getAssets() {
+    protected final AssetManagerProxy getAssets() {
         return getApp().getAssets();
     }
 
