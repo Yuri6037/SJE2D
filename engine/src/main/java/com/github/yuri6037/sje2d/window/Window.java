@@ -44,6 +44,8 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
+import org.lwjgl.glfw.GLFWVidMode;
+
 public final class Window implements AutoCloseable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
     private final long window;
@@ -62,18 +64,30 @@ public final class Window implements AutoCloseable {
         }
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        window = glfwCreateWindow(config.getWidth(), config.getHeight(), config.getTitle(), MemoryUtil.NULL,
-                MemoryUtil.NULL);
+        if (config.isFullscreen()) {
+            long display = glfwGetPrimaryMonitor();
+            GLFWVidMode mode = glfwGetVideoMode(display);
+            width = mode.width();
+            height = mode.height();
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            window = glfwCreateWindow(config.getWidth(), config.getHeight(), config.getTitle(), display,
+                    MemoryUtil.NULL);
+        } else {
+            width = config.getWidth();
+            height = config.getHeight();
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+            window = glfwCreateWindow(config.getWidth(), config.getHeight(), config.getTitle(), MemoryUtil.NULL,
+                    MemoryUtil.NULL);
+        }
         if (window == MemoryUtil.NULL) {
             throw new WindowException();
         }
         setupEventHandlers(config);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
-        refreshGL(config.getWidth(), config.getHeight());
+        refreshGL(width, height);
         glfwShowWindow(window);
         if (config.isVsync()) {
             setVsync(true);
