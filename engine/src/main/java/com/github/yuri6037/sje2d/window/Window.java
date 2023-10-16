@@ -64,6 +64,7 @@ public final class Window implements AutoCloseable {
         }
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         if (config.isFullscreen()) {
