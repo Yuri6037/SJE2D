@@ -144,4 +144,20 @@ public final class Render {
             glPopMatrix();
         }
     }
+
+    /**
+     * Draws the border of a rectangle.
+     * @param x x coordinate of the rectangle.
+     * @param y y coordinate of the rectangle.
+     * @param width width of the rectangle.
+     * @param height height of the rectangle.
+     * @param lineWidth size of the line.
+     */
+    public void drawOutlineRect(final float x, final float y, final float width, final float height,
+                                final float lineWidth) {
+        drawRect(x, y, lineWidth, height);
+        drawRect(x + width - lineWidth, y, lineWidth, height);
+        drawRect(x, y, width, lineWidth);
+        drawRect(x, y + height - lineWidth, width, lineWidth);
+    }
 }
