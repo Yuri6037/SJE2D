@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public final class Scheduler {
     static final class Function {
-        final double time;
-        final Runnable runnable;
+        private final double time;
+        private final Runnable runnable;
 
         Function(final double time, final Runnable runnable) {
             this.time = time;
@@ -38,7 +38,7 @@ public final class Scheduler {
      * Call this function each cycle in the main loop.
      */
     public void update() {
-        for (int i = functions.size() - 1 ; i != -1; --i) {
+        for (int i = functions.size() - 1; i != -1; --i) {
             Function f = functions.get(i);
             if (timer.getTime() >= f.time) {
                 f.runnable.run();
