@@ -30,12 +30,17 @@
 
 package com.github.yuri6037.sje2d.asset;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 import com.github.yuri6037.sje2d.util.UTF32Str;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class Strings implements IAsset {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Strings.class);
+
     private final HashMap<String, UTF32Str> db;
 
     /**
@@ -52,6 +57,15 @@ public final class Strings implements IAsset {
      * @return the corresponding UTF32Str or null if not found.
      */
     public UTF32Str get(final String name) {
+        UTF32Str str = db.get(name);
+        if (str != null) {
+            return str;
+        }
+        try {
+            db.put(name, new UTF32Str(name));
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Failed to load string", e);
+        }
         return db.get(name);
     }
 
