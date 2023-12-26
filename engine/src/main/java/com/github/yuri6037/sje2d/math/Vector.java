@@ -93,10 +93,30 @@ public record Vector(double x, double y) {
     }
 
     /**
-     * @return the squarred norm of this vector.
+     * @return the squared norm of this vector.
      */
-    public double normSquarred() {
+    public double normSquared() {
         return x * x + y * y;
+    }
+
+    /**
+     * Returns the distance between two vectors.
+     * @param a the first operand.
+     * @param b the second operand.
+     * @return the distance.
+     */
+    public static double distance(final Vector a, final Vector b) {
+        return b.sub(a).norm();
+    }
+
+    /**
+     * Returns the distance between two vectors.
+     * @param a the first operand.
+     * @param b the second operand.
+     * @return the squared distance.
+     */
+    public static double distanceSquared(final Vector a, final Vector b) {
+        return b.sub(a).normSquared();
     }
 
     /**
@@ -105,5 +125,41 @@ public record Vector(double x, double y) {
     public Vector normalize() {
         double n = norm();
         return new Vector(x / n, y / n);
+    }
+
+    /**
+     * Compares this vector to another.
+     * @param other the other operand.
+     * @return true if this is less than other, false otherwise.
+     */
+    public boolean lt(final Vector other) {
+        return x < other.x && y < other.y;
+    }
+
+    /**
+     * Compares this vector to another.
+     * @param other the other operand.
+     * @return true if this is greater than other, false otherwise.
+     */
+    public boolean gt(final Vector other) {
+        return x > other.x && y > other.y;
+    }
+
+    /**
+     * Compares this vector to another.
+     * @param other the other operand.
+     * @return true if this is less or equal than other, false otherwise.
+     */
+    public boolean le(final Vector other) {
+        return x <= other.x && y <= other.y;
+    }
+
+    /**
+     * Compares this vector to another.
+     * @param other the other operand.
+     * @return true if this is greater or equal than other, false otherwise.
+     */
+    public boolean ge(final Vector other) {
+        return x >= other.x && y >= other.y;
     }
 }
