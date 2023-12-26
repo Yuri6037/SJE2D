@@ -232,6 +232,15 @@ public final class Window implements AutoCloseable {
     }
 
     /**
+     * Enables or disables mouse capture. When the mouse is captures, the system cursor is hidden and locked to the
+     * current window.
+     * @param capture true to enable mouse capture, false to disable it.
+     */
+    public void enableMouseCapture(final boolean capture) {
+        glfwSetInputMode(window, GLFW_CURSOR, capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
+
+    /**
      * Updates this window. This function swaps buffers, polls events and clears the color buffer.
      * Call this function at the end of each frame.
      * WARNING: Do not call this method if you're not the direct owner of the timer,
