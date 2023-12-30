@@ -78,6 +78,47 @@ public record Color(float r, float g, float b, float a) {
         this((float) greyscale / 255.0f);
     }
 
+    /**
+     * Parse a color from a string.
+     * The color string can be the name of a color or a list of integer/float values separated by ',',
+     * optionally enclosed in parentheses.
+     * @throws NumberFormatException if one or more number (integer or float) failed to parse.
+     * @param color the color string.
+     * @return the parsed color.
+     */
+    public static Color parseColor(final String color) {
+        switch (color.toUpperCase()) {
+            case "RED": return RED;
+            case "GREEN": return GREEN;
+            case "BLUE": return BLUE;
+            case "CYAN": return CYAN;
+            case "YELLOW": return YELLOW;
+            case "WHITE": return WHITE;
+            case "BLACK": return BLACK;
+            default: {
+                String c = color.replace(" ", "");
+                if (c.startsWith("(")) {
+                    c = c.substring(0, c.length() - 1);
+                }
+                boolean isf = c.contains(".");
+                String[] pars = c.split(",");
+                return switch (pars.length) {
+                    case 1 -> isf ? new Color(Float.parseFloat(c)) : new Color(Integer.parseInt(c));
+                    case 3 -> isf
+                            ? new Color(Float.parseFloat(pars[0]), Float.parseFloat(pars[1]), Float.parseFloat(pars[2]))
+                            : new Color(Integer.parseInt(pars[0]), Integer.parseInt(pars[1]),
+                                Integer.parseInt(pars[2]));
+                    case 4 -> isf
+                            ? new Color(Float.parseFloat(pars[0]), Float.parseFloat(pars[1]), Float.parseFloat(pars[2]),
+                                    Float.parseFloat(pars[3]))
+                            : new Color(Integer.parseInt(pars[0]), Integer.parseInt(pars[1]), Integer.parseInt(pars[2]),
+                                    Integer.parseInt(pars[3]));
+                    default -> Color.BLACK;
+                };
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return String.format("(%d, %d, %d, %d)", (int) (r * 255.0), (int) (g * 255.0), (int) (b * 255.0),
