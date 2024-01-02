@@ -32,7 +32,6 @@ package com.github.yuri6037.sje2d.window;
 
 import com.github.yuri6037.sje2d.Application;
 import com.github.yuri6037.sje2d.input.Key;
-import com.github.yuri6037.sje2d.util.Bootstrap;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.Callback;
 import org.lwjgl.system.MemoryUtil;
@@ -51,6 +50,8 @@ public final class Window implements AutoCloseable {
     private final long window;
     private int width;
     private int height;
+    private int viewportWidth;
+    private int viewportHeight;
     private IInputHandler inputHandler;
 
     /**
@@ -120,14 +121,45 @@ public final class Window implements AutoCloseable {
         return height;
     }
 
+    /**
+     * @return the viewport width.
+     */
+    public int getViewportWidth() {
+        return viewportWidth;
+    }
+
+    /**
+     * @return the viewport height.
+     */
+    public int getViewportHeight() {
+        return viewportHeight;
+    }
+
+    /**
+     * Returns the X-scale to allow transformation from window space to viewport space.
+     * @return the x-scale value.
+     */
+    public float getScaleX() {
+        return (float) viewportWidth / (float) width;
+    }
+
+    /**
+     * Returns the Y-scale to allow transformation from window space to viewport space.
+     * @return the y-scale value.
+     */
+    public float getScaleY() {
+        return (float) viewportHeight / (float) height;
+    }
+
     private void refreshGL(final int newWidth, final int newHeight) {
         width = newWidth;
         height = newHeight;
-        if (Bootstrap.isMacOS()) {
-            glViewport(0, 0, newWidth * 2, newHeight * 2);
-        } else {
-            glViewport(0, 0, newWidth, newHeight);
-        }
+        int[] fbw = new int[1];
+        int[] fbh = new int[1];
+        glfwGetFramebufferSize(window, fbw, fbh);
+        viewportWidth = fbw[0];
+        viewportHeight = fbh[0];
+        glViewport(0, 0, viewportWidth, viewportHeight);
         glPushMatrix();
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
