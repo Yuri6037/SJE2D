@@ -46,7 +46,8 @@ import static org.lwjgl.opengl.GL11.*;
 //CHECKSTYLE ON
 
 public final class FontRender {
-    private final AssetStore<Font>.Ref font;
+    private final AssetStore<Font>.Ref fontAsset;
+    private final Font font;
 
     private final HashMap<Integer, AssetStore<FontBitmap>.Ref> bitmaps = new HashMap<>();
     private final HashSet<AssetURL> queuedBitmaps = new HashSet<>();
@@ -62,6 +63,16 @@ public final class FontRender {
      * @param font the font to use for drawing text.
      */
     public FontRender(final AssetStore<Font>.Ref font) {
+        this.fontAsset = font;
+        this.font = fontAsset.get();
+    }
+
+    /**
+     * Creates a new FontRender.
+     * @param font the font to use for drawing text.
+     */
+    public FontRender(final Font font) {
+        this.fontAsset = null;
         this.font = font;
     }
 
@@ -73,7 +84,7 @@ public final class FontRender {
     public boolean isLoaded(final UTF32Str text) {
         Iterator<Integer> iter = text.iterator();
         while (iter.hasNext()) {
-            int plane = font.get().getPlane(iter.next());
+            int plane = font.getPlane(iter.next());
             if (!bitmaps.containsKey(plane)) {
                 return false;
             }
@@ -115,11 +126,11 @@ public final class FontRender {
     }
 
     private AssetStore<FontBitmap>.Ref getBitmap(final AssetManagerProxy assets, final int c) {
-        int plane = font.get().getPlane(c);
+        int plane = font.getPlane(c);
         if (!bitmaps.containsKey(plane)) {
-            AssetStore<FontBitmap>.Ref bitmap = assets.get(FontBitmap.class, font.get().getVirtualPath(plane));
+            AssetStore<FontBitmap>.Ref bitmap = assets.get(FontBitmap.class, font.getVirtualPath(plane));
             if (bitmap == null) {
-                AssetURL url = font.get().getURL(c);
+                AssetURL url = font.getURL(c);
                 if (!queuedBitmaps.contains(url)) {
                     assets.queue(url);
                     queuedBitmaps.add(url);
@@ -185,7 +196,7 @@ public final class FontRender {
      * @return true if the string was rendered, false if some missing font bitmaps have been queued.
      */
     public boolean drawString(final AssetManagerProxy assets, final UTF32Str text, final float x, final float y) {
-        float blockSize = (float) font.get().getBlockSize();
+        float blockSize = (float) font.getBlockSize();
         glEnable(GL_TEXTURE_2D);
         boolean queued = false;
         Iterator<Integer> iter = text.iterator();
