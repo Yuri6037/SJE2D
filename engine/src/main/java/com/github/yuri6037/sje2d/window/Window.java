@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 //CHECKSTYLE OFF: AvoidStarImport
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 import org.lwjgl.glfw.GLFWVidMode;

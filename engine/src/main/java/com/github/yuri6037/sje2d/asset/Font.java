@@ -98,7 +98,6 @@ public final class Font implements IAsset {
         }
         try {
             return new AssetURLBuilder(url)
-                    .parameter("width", String.valueOf(bitmapWidth))
                     .parameter("plane", String.valueOf(getPlane(c)))
                     .parameter("vpath", basePath)
                     .build();

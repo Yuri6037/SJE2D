@@ -82,6 +82,7 @@ public final class FontLoader implements ITAssetLoader<Font> {
                         ? String.valueOf(rule.isBold()) : String.valueOf(base.isBold()))
                 .parameter("italic", rule.isItalic() != null
                         ? String.valueOf(rule.isItalic()) : String.valueOf(base.isItalic()))
+                .parameter("width", String.valueOf(bitmapWidth))
                 .build();
     }
 
@@ -97,6 +98,7 @@ public final class FontLoader implements ITAssetLoader<Font> {
         return builder.parameter("size", base.getSize().toString())
                 .parameter("bold", String.valueOf(base.isBold()))
                 .parameter("italic", String.valueOf(base.isItalic()))
+                .parameter("width", String.valueOf(bitmapWidth))
                 .build();
     }
 

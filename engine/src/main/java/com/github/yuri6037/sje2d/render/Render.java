@@ -36,7 +36,7 @@ import com.github.yuri6037.sje2d.asset.engine.map.AssetStore;
 import java.util.Objects;
 
 //CHECKSTYLE OFF: AvoidStarImport
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 public final class Render {

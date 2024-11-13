@@ -38,7 +38,6 @@ import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.math.MathUtils;
 import com.github.yuri6037.sje2d.util.ImageUtils;
 import com.github.yuri6037.sje2d.util.StringEnum;
-import org.lwjgl.opengl.GL12;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,14 +46,14 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 //CHECKSTYLE OFF: AvoidStarImport
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 public final class ImageTextureLoader extends BaseLoader<Texture> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageTextureLoader.class);
 
     private static final StringEnum<Integer> WRAP_MODE = StringEnum.create(
-            "edgeclamp", GL12.GL_CLAMP_TO_EDGE,
+            "edgeclamp", GL_CLAMP_TO_EDGE,
             "clamp", GL_CLAMP,
             "repeat", GL_REPEAT
     );
@@ -79,8 +78,8 @@ public final class ImageTextureLoader extends BaseLoader<Texture> {
     }
 
     private void computeModes() {
-        xWrap = WRAP_MODE.get(GL12.GL_CLAMP_TO_EDGE, url.getParameter("xwrap"));
-        yWrap = WRAP_MODE.get(GL12.GL_CLAMP_TO_EDGE, url.getParameter("ywrap"));
+        xWrap = WRAP_MODE.get(GL_CLAMP_TO_EDGE, url.getParameter("xwrap"));
+        yWrap = WRAP_MODE.get(GL_CLAMP_TO_EDGE, url.getParameter("ywrap"));
         min = SAMPLE_MODE.get(GL_NEAREST, url.getParameter("min"));
         mag = SAMPLE_MODE.get(GL_NEAREST, url.getParameter("mag"));
         LOGGER.debug("X-wrap mode: {}, Y-wrap mode: {}, min sample mode: {}, mag sample mode: {}", xWrap, yWrap,

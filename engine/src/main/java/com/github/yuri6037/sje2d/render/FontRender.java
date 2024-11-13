@@ -42,7 +42,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 //CHECKSTYLE OFF: AvoidStarImport
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 public final class FontRender {
@@ -210,14 +210,16 @@ public final class FontRender {
             }
             glBindTexture(GL_TEXTURE_2D, bitmap.get().getGLId());
             int width = bitmap.get().getWidth(c);
+            int descent = bitmap.get().getDescent();
+            int bearingX = bitmap.get().getBearingX();
             int cPlane = c % 256;
             int gx = (cPlane % 16);
-            int gy = (cPlane - gx) / 16;
+            int gy = ((cPlane - gx) / 16) - 1;
             float u = gx / 16f;
-            float v = gy / 16f - 0.005f;
-            //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 2 (WTF?!)
-            float u1 = u + 1 / 17f;
-            float v1 = v + 1 / 17f;
+            float v = gy / 16f;
+            float u1 = u + 1 / 16f;
+            //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 1 (WTF?!)
+            float v1 = v + 1 / 16f;
 
             if (rotation != 0.0f) {
                 glPushMatrix();
@@ -226,15 +228,23 @@ public final class FontRender {
                 glTranslatef(-x, -y, 0);
             }
 
+            float qx = posx - bearingX;
+            float qy = y - descent;
+
             glBegin(GL_QUADS);
-            glTexCoord2f(u, v);
-            glVertex2f(posx, y);
-            glTexCoord2f(u1, v);
-            glVertex2f(posx + blockSize, y);
-            glTexCoord2f(u1, v1);
-            glVertex2f(posx + blockSize, y + blockSize);
-            glTexCoord2f(u, v1);
-            glVertex2f(posx, y + blockSize);
+            {
+                glTexCoord2f(u, v);
+                glVertex2f(qx, qy);
+
+                glTexCoord2f(u1, v);
+                glVertex2f(qx + blockSize, qy);
+
+                glTexCoord2f(u1, v1);
+                glVertex2f(qx + blockSize, qy + blockSize);
+
+                glTexCoord2f(u, v1);
+                glVertex2f(qx, qy + blockSize);
+            }
             glEnd();
 
             if (rotation != 0.0f) {

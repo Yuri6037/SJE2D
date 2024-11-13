@@ -36,20 +36,26 @@ import java.util.HashMap;
 public class FontBitmap extends Texture {
     private final HashMap<Integer, Integer> charWidth;
     private final int charHeight;
+    private final int bearingX;
+    private final int descent;
 
     /**
      * Creates a new texture from a buffer and its size.
      * @param buffer the buffer containing all texel data.
      * @param width the bitmap width.
      * @param charHeight the maximum character height of this font bitmap.
+     * @param bearingX the X bearing of the font (this is guess due to Java not providing this metric).
+     * @param descent the descent of the font.
      * @param charWidth the width of each character in this font bitmap.
      */
     public FontBitmap(final ByteBuffer buffer, final int width, final int charHeight,
-                      final HashMap<Integer, Integer> charWidth) {
+                      final int bearingX, final int descent, final HashMap<Integer, Integer> charWidth) {
         //noinspection SuspiciousNameCombination
         super(buffer, width, width);
         this.charHeight = charHeight;
         this.charWidth = charWidth;
+        this.bearingX = bearingX;
+        this.descent = descent;
     }
 
     /**
@@ -67,5 +73,20 @@ public class FontBitmap extends Texture {
     public int getWidth(final int c) {
         Integer i = charWidth.get(c);
         return i == null ? -1 : i;
+    }
+
+
+    /**
+     * @return the font descent.
+     */
+    public int getDescent() {
+        return descent;
+    }
+
+    /**
+     * @return the X bearing guess of the font.
+     */
+    public int getBearingX() {
+        return bearingX;
     }
 }

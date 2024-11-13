@@ -35,7 +35,7 @@ import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 //CHECKSTYLE OFF: AvoidStarImport
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 public class Texture implements IAsset {

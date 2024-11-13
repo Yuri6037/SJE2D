@@ -38,7 +38,7 @@ import com.github.yuri6037.sje2d.math.MathUtils;
 import com.github.yuri6037.sje2d.util.ImageUtils;
 
 //CHECKSTYLE OFF: AvoidStarImport
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 //CHECKSTYLE ON
 
 import java.nio.ByteBuffer;
@@ -131,8 +131,8 @@ public abstract class AnimationLoader extends BaseLoader<Animation> {
     @Override
     protected final Animation createAsset() throws Exception {
         Animation animation = new Animation(buffer, frameWidth, frameHeight, fps, numRows, numColumns, frames.size());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         return animation;
