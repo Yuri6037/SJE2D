@@ -130,7 +130,7 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
         Graphics2D g2d = image.createGraphics();
         g2d.setFont(font);
         g2d.setColor(Color.WHITE);
-        // Unfortunately it appears that in java getting the X bearing of a font is impossible.
+        // Unfortunately it appears that in java, getting the X bearing of a font is impossible.
         guessBearingX = getFontSize() / 4;
         descent = g2d.getFontMetrics().getDescent();
         int ch = g2d.getFontMetrics().getHeight();
@@ -144,7 +144,7 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
                 int posx = j * blockSize;
                 int posy = i * blockSize;
                 //g2d.drawRect(posx, posy, blockSize, blockSize);
-                g2d.drawString(cs, posx + guessBearingX, posy - descent);
+                g2d.drawString(cs, posx + guessBearingX, (posy + blockSize) - descent);
                 ++c;
             }
         }

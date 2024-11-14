@@ -214,11 +214,10 @@ public final class FontRender {
             int bearingX = bitmap.get().getBearingX();
             int cPlane = c % 256;
             int gx = (cPlane % 16);
-            int gy = ((cPlane - gx) / 16) - 1;
+            int gy = (cPlane - gx) / 16;
             float u = gx / 16f;
             float v = gy / 16f;
             float u1 = u + 1 / 16f;
-            //1/17 because somehow OpenGL has a bug and believes that 16 ~= 16 + 1 (WTF?!)
             float v1 = v + 1 / 16f;
 
             if (rotation != 0.0f) {
