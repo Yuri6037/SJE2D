@@ -34,10 +34,15 @@ import com.github.yuri6037.sje2d.render.Color;
 
 import java.util.HashMap;
 
+/**
+ * A helper class to implement the IConfigurable interface.
+ */
 public final class Configurator implements IConfigurable {
     private static class Function<V> {
+        //CHECKSTYLE OFF: VisibilityModifier
         IConfigFunction<V> function;
         Class<V> parameterClass;
+        //CHECKSTYLE ON
 
         void apply(final Object value) {
             function.apply(parameterClass.cast(value));
@@ -64,44 +69,47 @@ public final class Configurator implements IConfigurable {
         return configMap.containsKey(key) ? configMap.get(key).parameterClass : null;
     }
 
+    /**
+     * Parse a primitive parameter.
+     * @param paramType the desired parameter type.
+     * @param value the parameter value as a string to parse.
+     * @return the parsed parameter value or null if the parameter type is unknown to this function.
+     */
     public static Object parsePrimitive(final Class<?> paramType, final String value) {
-        if (paramType == Boolean.class)
+        if (paramType == Boolean.class) {
             return Boolean.parseBoolean(value);
-        else if (paramType == Integer.class)
+        } else if (paramType == Integer.class) {
             return Integer.parseInt(value);
-        else if (paramType == Float.class)
+        } else if (paramType == Float.class) {
             return Float.parseFloat(value);
-        else if (paramType == Double.class)
+        } else if (paramType == Double.class) {
             return Double.parseDouble(value);
-        else if (paramType == String.class)
+        } else if (paramType == String.class) {
             return value;
-        else if (paramType == Color.class)
+        } else if (paramType == Color.class) {
             return Color.parseColor(value);
-        else if (paramType == Float[].class) {
+        } else if (paramType == Float[].class) {
             String[] values = value.split(",");
             Float[] vals = new Float[values.length];
             for (int i = 0; i != values.length; ++i) {
                 vals[i] = Float.parseFloat(values[i]);
             }
             return vals;
-        }
-        else if (paramType == Double[].class) {
+        } else if (paramType == Double[].class) {
             String[] values = value.split(",");
             Double[] vals = new Double[values.length];
             for (int i = 0; i != values.length; ++i) {
                 vals[i] = Double.parseDouble(values[i]);
             }
             return vals;
-        }
-        else if (paramType == Integer[].class) {
+        } else if (paramType == Integer[].class) {
             String[] values = value.split(",");
             Integer[] vals = new Integer[values.length];
             for (int i = 0; i != values.length; ++i) {
                 vals[i] = Integer.parseInt(values[i]);
             }
             return vals;
-        }
-        else if (paramType == Boolean[].class) {
+        } else if (paramType == Boolean[].class) {
             String[] values = value.split(",");
             Boolean[] vals = new Boolean[values.length];
             for (int i = 0; i != values.length; ++i) {
@@ -112,6 +120,13 @@ public final class Configurator implements IConfigurable {
         return null;
     }
 
+    /**
+     * Adds a configuration parameter.
+     * @param key the parameter name.
+     * @param parameterClass the type of the parameter.
+     * @param function the setter function to call to set the parameter value.
+     * @param <V> the generic type of the parameter.
+     */
     public <V> void addParam(final String key, final Class<V> parameterClass, final IConfigFunction<V> function) {
         Function<V> f = new Function<>();
         f.parameterClass = parameterClass;

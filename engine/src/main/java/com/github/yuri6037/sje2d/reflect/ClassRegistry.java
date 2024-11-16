@@ -33,31 +33,53 @@ package com.github.yuri6037.sje2d.reflect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ClassRegistry {
+/**
+ * A simple class registry which works by filtering classes based on the presence of the custom Reflect attribute.
+ */
+public final class ClassRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRegistry.class);
 
-    private static final HashMap<String, Class<? extends IConfigurable>> classes = new HashMap<>();
-    private static final ArrayList<String> searchPaths = new ArrayList<>();
+    private static final HashMap<String, Class<? extends IConfigurable>> CLASSES = new HashMap<>();
+    private static final ArrayList<String> SEARCH_PATHS = new ArrayList<>();
 
+    private ClassRegistry() {
+    }
+
+    /**
+     * Adds a new class to the class registry.
+     * @param cl the class to add.
+     */
     public static void add(final Class<? extends IConfigurable> cl) {
         if (cl.getAnnotation(Reflect.class) == null) {
             LOGGER.error("Not adding class {}: class is not Layout aware", cl);
             return;
         }
-        classes.put(cl.getSimpleName(), cl);
+        CLASSES.put(cl.getSimpleName(), cl);
     }
 
+    /**
+     * Add a class search path to the class registry.
+     * @param path the full class path.
+     */
     public static void addSearchPath(final String path) {
-        searchPaths.add(path);
+        SEARCH_PATHS.add(path);
     }
 
+    /**
+     * Finds a registered class.
+     * @param name the name of the class to search for (case-sensitive).
+     * @return the class matching the given name.
+     * @throws ClassNotFoundException if the class could not be found.
+     */
     public static Class<? extends IConfigurable> getClass(final String name) throws ClassNotFoundException {
-        Class<? extends IConfigurable> cl = classes.get(name);
-        if (cl != null)
+        Class<? extends IConfigurable> cl = CLASSES.get(name);
+        if (cl != null) {
             return cl;
-        for (String path: searchPaths) {
+        }
+        for (String path: SEARCH_PATHS) {
             try {
                 LOGGER.debug("{}.{}", path, name);
                 Class<?> cl1 = Class.forName(path + "." + name);

@@ -28,17 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.github.yuri6037.sje2d.reflect;
-
 /**
- * The interface of the set function of a configuration parameter.
- * @param <V> the type of parameter.
+ * This module contains basic reflection utilities.
  */
-public interface IConfigFunction<V> {
-    /**
-     * Run the set function.
-     * @param value the value to set.
-     * @throws IllegalArgumentException if the value is bad.
-     */
-    void apply(V value) throws IllegalArgumentException;
-}
+package com.github.yuri6037.sje2d.reflect;

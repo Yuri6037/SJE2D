@@ -30,7 +30,23 @@
 
 package com.github.yuri6037.sje2d.reflect;
 
+/**
+ * A class which includes configuration parameter and can be registered with the reflection engine.
+ */
 public interface IConfigurable {
-    void setParam(final String key, final Object value) throws IllegalArgumentException;
-    Class<?> getParamType(final String key);
+    /**
+     * Sets the value of a parameter.
+     * @param key the parameter name.
+     * @param value the parameter value.
+     * @throws IllegalArgumentException when the parameter does not exist, if the parameter value does not match the
+     * type of parameter or if the value is bad.
+     */
+    void setParam(String key, Object value) throws IllegalArgumentException;
+
+    /**
+     * Returns the type of the given parameter.
+     * @param key the parameter name.
+     * @return the type of the parameter or null if the parameter does not exist.
+     */
+    Class<?> getParamType(String key);
 }
