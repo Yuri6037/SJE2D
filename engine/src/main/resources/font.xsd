@@ -10,6 +10,7 @@
       <xs:element type="xs:positiveInteger" name="size"/>
       <xs:element type="xs:boolean" name="italic"/>
       <xs:element type="xs:boolean" name="bold"/>
+      <xs:element type="xs:positiveInteger" minOccurs="0" maxOccurs="1" name="bearingX"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ruleType">
@@ -19,6 +20,7 @@
       <xs:element type="xs:positiveInteger" name="size" minOccurs="0" maxOccurs="1"/>
       <xs:element type="xs:boolean" name="italic" minOccurs="0" maxOccurs="1"/>
       <xs:element type="xs:boolean" name="bold" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="xs:positiveInteger" minOccurs="0" maxOccurs="1" name="bearingX"/>
     </xs:sequence>
     <xs:attribute type="xs:string" name="min" use="required"/>
     <xs:attribute type="xs:string" name="max" use="required"/>
@@ -32,6 +34,7 @@
     <xs:sequence>
       <xs:element type="xs:string" name="name"/>
       <xs:element type="xs:string" name="width"/>
+      <xs:element type="xs:boolean" name="debug" minOccurs="0" maxOccurs="1"/>
       <xs:element type="baseType" name="base"/>
       <xs:element type="rulesType" name="rules"/>
     </xs:sequence>

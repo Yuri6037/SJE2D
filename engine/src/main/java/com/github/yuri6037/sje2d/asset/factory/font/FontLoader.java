@@ -56,6 +56,7 @@ public final class FontLoader implements ITAssetLoader<Font> {
     private final ArrayList<Rule> rules = new ArrayList<>();
     private AssetURL baseUrl;
     private final AssetURL url;
+    private boolean enableDebug;
 
     /**
      * Creates a new FontLoader.
@@ -76,14 +77,16 @@ public final class FontLoader implements ITAssetLoader<Font> {
         } else {
             throw new IllegalArgumentException("Invalid rule type");
         }
-        return builder
-                .parameter("size", rule.getSize() != null ? rule.getSize().toString() : base.getSize().toString())
+        builder.parameter("size", rule.getSize() != null ? rule.getSize().toString() : base.getSize().toString())
                 .parameter("bold", rule.isBold() != null
                         ? String.valueOf(rule.isBold()) : String.valueOf(base.isBold()))
                 .parameter("italic", rule.isItalic() != null
                         ? String.valueOf(rule.isItalic()) : String.valueOf(base.isItalic()))
-                .parameter("width", String.valueOf(bitmapWidth))
-                .build();
+                .parameter("width", String.valueOf(bitmapWidth));
+        if (rule.getBearingX() != null) {
+            builder.parameter("bearingX", rule.getBearingX().toString());
+        }
+        return builder.build();
     }
 
     private AssetURL loadBaseRule(final BaseType base) throws Exception {
@@ -95,11 +98,14 @@ public final class FontLoader implements ITAssetLoader<Font> {
         } else {
             throw new IllegalArgumentException("Invalid rule type");
         }
-        return builder.parameter("size", base.getSize().toString())
+        builder.parameter("size", base.getSize().toString())
                 .parameter("bold", String.valueOf(base.isBold()))
                 .parameter("italic", String.valueOf(base.isItalic()))
-                .parameter("width", String.valueOf(bitmapWidth))
-                .build();
+                .parameter("width", String.valueOf(bitmapWidth));
+        if (base.getBearingX() != null) {
+            builder.parameter("bearingX", base.getBearingX().toString());
+        }
+        return builder.build();
     }
 
     @Override
@@ -108,6 +114,7 @@ public final class FontLoader implements ITAssetLoader<Font> {
         FontType font = ctx.createUnmarshaller().unmarshal(new StreamSource(stream), FontType.class).getValue();
         vpath = new VirtualPathBuilder(url).setType("Font").setPath(font.getName()).build();
         bitmapWidth = Integer.parseInt(font.getWidth());
+        enableDebug = font.isDebug() != null && font.isDebug();
         if (!MathUtils.isPowerOfTwo(bitmapWidth)) {
             throw new IllegalArgumentException("Font bitmap width must be a power of 2");
         }
@@ -123,6 +130,6 @@ public final class FontLoader implements ITAssetLoader<Font> {
 
     @Override
     public AssetStore<Font> create() throws Exception {
-        return new AssetStore<>(vpath, new Font(vpath, bitmapWidth, rules, baseUrl));
+        return new AssetStore<>(vpath, new Font(vpath, bitmapWidth, enableDebug, rules, baseUrl));
     }
 }

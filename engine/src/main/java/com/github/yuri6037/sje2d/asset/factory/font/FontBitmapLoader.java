@@ -41,10 +41,12 @@ import com.github.yuri6037.sje2d.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -109,8 +111,29 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
         return style;
     }
 
+    private float guessBearingX(final Font font, final int plane, final Graphics2D g2d) {
+        float bearingX = 0;
+        int c = plane * 256;
+        for (int i = 0; i != 16; ++i) {
+            for (int j = 0; j != 16; ++j) {
+                byte[] arr = ByteBuffer.allocate(4).putInt(c).array();
+                String cs = new String(arr, Charset.forName("UTF-32"));
+                float bx = font.createGlyphVector(g2d.getFontRenderContext(), cs).getGlyphMetrics(0).getLSB();
+                if (bx > bearingX) {
+                    bearingX = bx;
+                }
+                ++c;
+            }
+        }
+        return bearingX;
+    }
+
     @Override
     public final Result load(final AssetDepMap dependencies) throws Exception {
+        boolean enableDebug = url.getParameter("debug", "false").equals("true");
+        if (enableDebug) {
+            LOGGER.info("Debug mode is enabled for this bitmap");
+        }
         width = Integer.parseInt(url.getParameter("width", "512"));
         if (!MathUtils.isPowerOfTwo(width)) {
             throw new IllegalArgumentException("Bitmap size is not a power of 2");
@@ -131,7 +154,15 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
         g2d.setFont(font);
         g2d.setColor(Color.WHITE);
         // Unfortunately it appears that in java, getting the X bearing of a font is impossible.
-        guessBearingX = getFontSize() / 4;
+        // If there is a parameter in the URL that specifies the exact bearing to use, take it, otherwise attempt to
+        // guess one.
+        String bearingX = url.getParameter("bearingX");
+        guessBearingX = (int) guessBearingX(font, plane, g2d);
+        LOGGER.debug("Guessed X bearing {} for {}", guessBearingX, vpath);
+        if (bearingX != null) {
+            guessBearingX = Integer.parseInt(bearingX);
+            LOGGER.debug("Using user fixed X bearing {} for {}", guessBearingX, vpath);
+        }
         descent = g2d.getFontMetrics().getDescent();
         int ch = g2d.getFontMetrics().getHeight();
         int c = plane * 256;
@@ -143,12 +174,18 @@ public abstract class FontBitmapLoader implements ITAssetLoader<FontBitmap> {
                 charWidth.put(c, cw);
                 int posx = j * blockSize;
                 int posy = i * blockSize;
-                //g2d.drawRect(posx, posy, blockSize, blockSize);
+                if (enableDebug) {
+                    g2d.drawRect(posx, posy, blockSize, blockSize);
+                }
                 g2d.drawString(cs, posx + guessBearingX, (posy + blockSize) - descent);
                 ++c;
             }
         }
-        //ImageIO.write(image, "png", new File("./" + vpath.replace("/", "_") + ".png"));
+        if (enableDebug) {
+            File out = new File("./" + vpath.replace("/", "_") + ".png");
+            LOGGER.debug("Writing debug bitmap {}", out.getPath());
+            ImageIO.write(image, "png", out);
+        }
         buffer = ImageUtils.imageToBuffer(image);
         charHeight = ch;
         return Result.ready();

@@ -43,6 +43,7 @@ public final class Font implements IAsset {
     private final int bitmapWidth;
     private final ArrayList<Rule> rules;
     private final AssetURL baseUrl;
+    private final boolean enableDebug;
 
     /**
      * Creates a new Font asset.
@@ -50,12 +51,15 @@ public final class Font implements IAsset {
      * @param bitmapWidth the width of the generated font bitmaps.
      * @param rules a list of rules to treat some Unicode ranges differently.
      * @param baseUrl the base URL if no rule exists for a given character range.
+     * @param enableDebug true to enable generating debug font bitmaps.
      */
-    public Font(final String basePath, final int bitmapWidth, final ArrayList<Rule> rules, final AssetURL baseUrl) {
+    public Font(final String basePath, final int bitmapWidth, final boolean enableDebug, final ArrayList<Rule> rules,
+                final AssetURL baseUrl) {
         this.bitmapWidth = bitmapWidth;
         this.rules = rules;
         this.baseUrl = baseUrl;
         this.basePath = basePath;
+        this.enableDebug = enableDebug;
     }
 
     /**
@@ -100,6 +104,7 @@ public final class Font implements IAsset {
             return new AssetURLBuilder(url)
                     .parameter("plane", String.valueOf(getPlane(c)))
                     .parameter("vpath", basePath)
+                    .parameter("debug", String.valueOf(enableDebug))
                     .build();
         } catch (MalformedURLException e) {
             //Normally this cannot occur.
