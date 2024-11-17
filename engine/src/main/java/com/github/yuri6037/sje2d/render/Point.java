@@ -31,4 +31,8 @@
 package com.github.yuri6037.sje2d.render;
 
 public record Point(float x, float y) {
+    /**
+     * A zero point.
+     */
+    public static final Point ZERO = new Point(0, 0);
 }

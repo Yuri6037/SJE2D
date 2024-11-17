@@ -31,4 +31,8 @@
 package com.github.yuri6037.sje2d.render;
 
 public record Size(float width, float height) {
+    /**
+     * A zero size.
+     */
+    public static final Size ZERO = new Size(0, 0);
 }
