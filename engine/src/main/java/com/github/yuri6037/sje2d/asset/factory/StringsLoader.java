@@ -40,6 +40,7 @@ import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
 import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
+import com.github.yuri6037.sje2d.asset.factory.base.BaseLoader;
 import com.github.yuri6037.sje2d.util.UTF32Str;
 
 public final class StringsLoader extends BaseLoader<Strings> {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, SJE2D
+ * Copyright (c) 2024, SJE2D
  *
  * All rights reserved.
  *
@@ -28,41 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.github.yuri6037.sje2d.asset.factory;
-
-import com.github.yuri6037.sje2d.asset.Sound;
-import com.github.yuri6037.sje2d.asset.engine.AssetURL;
-import com.github.yuri6037.sje2d.asset.engine.map.AssetDepMap;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.IAssetStream;
-import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
-import com.github.yuri6037.sje2d.asset.factory.base.BaseLoader;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-
-public final class SoundLoader extends BaseLoader<Sound> {
-    private final InputStream stream;
-    private Clip clip;
-
-    SoundLoader(final IAssetStream stream, final AssetURL url) {
-        super(url);
-        this.stream = new BufferedInputStream(StreamUtils.makeInputStream(stream));
-    }
-
-    @Override
-    public Result load(final AssetDepMap dependencies) throws Exception {
-        AudioInputStream audio = AudioSystem.getAudioInputStream(stream);
-        clip = AudioSystem.getClip();
-        clip.open(audio);
-        return Result.ready();
-    }
-
-    @Override
-    protected Sound createAsset() throws Exception {
-        return new Sound(clip);
-    }
-}
+/**
+ * Base loaders for various asset types.
+ */
+package com.github.yuri6037.sje2d.asset.factory.base;

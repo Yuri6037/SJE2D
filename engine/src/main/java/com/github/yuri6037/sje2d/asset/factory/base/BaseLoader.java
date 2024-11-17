@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, SJE2D
+ * Copyright (c) 2024, SJE2D
  *
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.github.yuri6037.sje2d.asset.factory;
+package com.github.yuri6037.sje2d.asset.factory.base;
 
 import com.github.yuri6037.sje2d.asset.engine.AssetURL;
 import com.github.yuri6037.sje2d.asset.engine.VirtualPathBuilder;
