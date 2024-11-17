@@ -160,4 +160,35 @@ public final class Render {
         drawRect(x, y, width, lineWidth);
         drawRect(x, y + height - lineWidth, width, lineWidth);
     }
+
+    /**
+     * Draws a circle.
+     * WARNING: All angles are in radians.
+     * @param centerX the X center of the circle.
+     * @param centerY the Y center of the circle.
+     * @param radius the radius.
+     * @param startAngle the angle to start at (in radians).
+     * @param endAngle the angle to end at (in radians).
+     * @param vertices the number of vertices to draw.
+     */
+    public void drawCircle(final float centerX, final float centerY, final float radius, final float startAngle,
+                           final float endAngle, final int vertices) {
+        float angle = startAngle;
+        float offset = (endAngle - startAngle) / vertices;
+        glBegin(GL_TRIANGLES);
+        for (int i = 0; i < vertices; ++i) {
+            float x1 = (float) Math.cos(angle) * radius;
+            float y1 = (float) Math.sin(angle) * radius;
+            glTexCoord2f(0, 0);
+            glVertex2f(centerX, centerY);
+            glTexCoord2f(1, 0);
+            glVertex2f(centerX + x1, centerY + y1);
+            angle += offset;
+            float x2 = (float) Math.cos(angle) * radius;
+            float y2 = (float) Math.sin(angle) * radius;
+            glTexCoord2f(1, 1);
+            glVertex2f(centerX + x2, centerY + y2);
+        }
+        glEnd();
+    }
 }
