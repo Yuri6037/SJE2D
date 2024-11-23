@@ -58,15 +58,18 @@ public abstract class XmlReflectionLoader<T extends IAsset> extends AsyncLoader<
     private Document document1 = null;
     private final HashMap<String, IXmlFunction> handlersByName = new HashMap<>();
     private final HashMap<Class<?>, Function<String, Object>> parameterDecoders = new HashMap<>();
+    private final ClassRegistry classRegistry;
 
     /**
      * Create a new instance of a loader which loads types registered with the reflection engine described in XML.
      * @param url the url to load.
      * @param stream the XML file stream.
+     * @param classRegistry an instance of a ClassRegistry to use when creating new objects from reflection.
      */
-    public XmlReflectionLoader(final AssetURL url, final IAssetStream stream) {
+    public XmlReflectionLoader(final AssetURL url, final IAssetStream stream, final ClassRegistry classRegistry) {
         super(url);
         this.stream = StreamUtils.makeInputStream(stream);
+        this.classRegistry = classRegistry;
     }
 
     /**
@@ -97,7 +100,7 @@ public abstract class XmlReflectionLoader<T extends IAsset> extends AsyncLoader<
      */
     protected <V extends IConfigurable> V createObject(final Class<V> objectClass, final Element element)
             throws Exception {
-        Class<? extends IConfigurable> cl = ClassRegistry.getClass(element.getTagName());
+        Class<? extends IConfigurable> cl = classRegistry.getClass(element.getTagName());
         IConfigurable obj = cl.getConstructor().newInstance();
         return objectClass.cast(obj);
     }

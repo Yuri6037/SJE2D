@@ -42,30 +42,33 @@ import java.util.HashMap;
 public final class ClassRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRegistry.class);
 
-    private static final HashMap<String, Class<? extends IConfigurable>> CLASSES = new HashMap<>();
-    private static final ArrayList<String> SEARCH_PATHS = new ArrayList<>();
+    private final HashMap<String, Class<? extends IConfigurable>> classes = new HashMap<>();
+    private final ArrayList<String> searchPaths = new ArrayList<>();
 
-    private ClassRegistry() {
+    /**
+     * Creates a new ClassRegistry.
+     */
+    public ClassRegistry() {
     }
 
     /**
      * Adds a new class to the class registry.
      * @param cl the class to add.
      */
-    public static void add(final Class<? extends IConfigurable> cl) {
+    public void add(final Class<? extends IConfigurable> cl) {
         if (cl.getAnnotation(Reflect.class) == null) {
             LOGGER.error("Not adding class {}: class is not Layout aware", cl);
             return;
         }
-        CLASSES.put(cl.getSimpleName(), cl);
+        classes.put(cl.getSimpleName(), cl);
     }
 
     /**
      * Add a class search path to the class registry.
      * @param path the full class path.
      */
-    public static void addSearchPath(final String path) {
-        SEARCH_PATHS.add(path);
+    public void addSearchPath(final String path) {
+        searchPaths.add(path);
     }
 
     /**
@@ -74,12 +77,12 @@ public final class ClassRegistry {
      * @return the class matching the given name.
      * @throws ClassNotFoundException if the class could not be found.
      */
-    public static Class<? extends IConfigurable> getClass(final String name) throws ClassNotFoundException {
-        Class<? extends IConfigurable> cl = CLASSES.get(name);
+    public Class<? extends IConfigurable> getClass(final String name) throws ClassNotFoundException {
+        Class<? extends IConfigurable> cl = classes.get(name);
         if (cl != null) {
             return cl;
         }
-        for (String path: SEARCH_PATHS) {
+        for (String path: searchPaths) {
             try {
                 LOGGER.debug("{}.{}", path, name);
                 Class<?> cl1 = Class.forName(path + "." + name);

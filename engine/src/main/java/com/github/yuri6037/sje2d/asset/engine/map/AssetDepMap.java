@@ -35,6 +35,8 @@ import com.github.yuri6037.sje2d.asset.engine.system.IAsset;
 import java.util.HashMap;
 import java.util.Set;
 
+//TODO: ensure class type exact before returning an instance of the asset.
+
 /**
  * This class represents a sub-set of assets which are expected to be
  * dependencies of a particular asset.
@@ -68,6 +70,19 @@ public class AssetDepMap {
         } catch (ClassCastException e) {
             return null;
         }
+    }
+
+    /**
+     * Gets an asset from this map.
+     * @param vpath virtual path of the asset.
+     * @return an instance of an asset or null if not possible.
+     */
+    public IAsset get(final String vpath) {
+        AssetStore<?> store = map.get(vpath);
+        if (store == null) {
+            return null;
+        }
+        return store.getAsset();
     }
 
     /**

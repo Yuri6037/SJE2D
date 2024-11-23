@@ -88,6 +88,34 @@ public abstract class AsyncLoader<T extends IAsset> extends BaseLoader<T> {
     }
 
     /**
+     * Awaits an asset dependency.
+     * @param vpath the virtual path of the required asset.
+     * @return the found asset or null if not found.
+     */
+    protected IAsset awaitAsset(final String vpath) {
+        IAsset asset;
+        synchronized (this) {
+            asset = deps1.contains(vpath) ? deps1.get(vpath) : null;
+            if (asset == null) {
+                neededDeps = new String[]{vpath};
+            }
+        }
+        if (asset != null) {
+            return asset;
+        }
+        while (true) {
+            synchronized (this) {
+                if (neededDeps == null) {
+                    asset = deps1.contains(vpath) ? deps1.get(vpath) : null;
+                    break;
+                }
+            }
+            Thread.yield();
+        }
+        return asset;
+    }
+
+    /**
      * Loads this asset asynchronously by allowing blocking-like behavior when requiring dependencies.
      * @throws Exception when this asset failed to load.
      */
