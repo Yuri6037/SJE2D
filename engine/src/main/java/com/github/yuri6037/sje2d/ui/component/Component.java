@@ -58,18 +58,8 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
     public Component() {
         addParam("showDebugBoundingBox", Boolean.class, this::setShowDebugBoundingBox);
         addParam("autoSize", Boolean.class, this::setAutoSize);
-        addParam("pos", Float[].class, v -> {
-            if (v.length != 2) {
-                throw new IllegalArgumentException("Invalid number of arguments: expected 2, got " + v.length);
-            }
-            setPos(v[0], v[1]);
-        });
-        addParam("size", Float[].class, v -> {
-            if (v.length != 2) {
-                throw new IllegalArgumentException("Invalid number of arguments: expected 2, got " + v.length);
-            }
-            setSize(v[0], v[1]);
-        });
+        addParam("pos", Point.class, this::setPos);
+        addParam("size", Size.class, this::setSize);
     }
 
     /**
@@ -103,29 +93,27 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
      */
     public final Component setAutoSize(final boolean autoSize1) {
         autoSize = autoSize1;
-        setSize(0, 0);
+        setSize(Size.ZERO);
         return this;
     }
 
     /**
      * Sets the position of this component.
-     * @param x the new x position of this component.
-     * @param y the new y position of this component.
+     * @param pos the new position of this component.
      * @return this for chaining operations.
      */
-    public final Component setPos(final float x, final float y) {
-        rect.setPos(new Point(x, y));
+    public final Component setPos(final Point pos) {
+        rect.setPos(pos);
         return this;
     }
 
     /**
      * Sets the size of this component.
-     * @param width the new width of this component.
-     * @param height the new height of this component.
+     * @param size the new size of this component.
      * @return this for chaining operations.
      */
-    public final Component setSize(final float width, final float height) {
-        rect.setSize(new Size(width, height));
+    public final Component setSize(final Size size) {
+        rect.setSize(size);
         return this;
     }
 
@@ -142,7 +130,7 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
                 width = width / parentRect.getSize().width();
                 height = height / parentRect.getSize().height();
             }
-            setSize(width, height);
+            setSize(new Size(width, height));
         }
     }
     //CHECKSTYLE ON

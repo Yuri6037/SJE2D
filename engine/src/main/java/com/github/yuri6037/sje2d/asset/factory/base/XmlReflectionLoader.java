@@ -39,6 +39,10 @@ import com.github.yuri6037.sje2d.asset.engine.system.stream.StreamUtils;
 import com.github.yuri6037.sje2d.reflect.ClassRegistry;
 import com.github.yuri6037.sje2d.reflect.Configurator;
 import com.github.yuri6037.sje2d.reflect.IConfigurable;
+import com.github.yuri6037.sje2d.ui.asset.style.CompositeStyle;
+import com.github.yuri6037.sje2d.ui.asset.style.RectangleStyle;
+import com.github.yuri6037.sje2d.ui.asset.style.ScrollbarStyle;
+import com.github.yuri6037.sje2d.ui.asset.style.TextStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -131,6 +135,14 @@ public abstract class XmlReflectionLoader<T extends IAsset> extends AsyncLoader<
                 obj.setParam(node.getNodeName(), awaitAsset(Font.class, node.getNodeValue()));
             } else if (paramType == Texture.class) {
                 obj.setParam(node.getNodeName(), awaitAsset(Texture.class, node.getNodeValue()));
+            } else if (paramType == RectangleStyle.class) {
+                obj.setParam(node.getNodeName(), awaitAsset(RectangleStyle.class, node.getNodeValue()));
+            } else if (paramType == TextStyle.class) {
+                obj.setParam(node.getNodeName(), awaitAsset(TextStyle.class, node.getNodeValue()));
+            } else if (paramType == CompositeStyle.class) {
+                obj.setParam(node.getNodeName(), awaitAsset(CompositeStyle.class, node.getNodeValue()));
+            } else if (paramType == ScrollbarStyle.class) {
+                    obj.setParam(node.getNodeName(), awaitAsset(ScrollbarStyle.class, node.getNodeValue()));
             } else {
                 Object value = Configurator.parsePrimitive(paramType, node.getNodeValue());
                 if (value != null) {

@@ -31,7 +31,9 @@
 package com.github.yuri6037.sje2d.ui.core;
 
 import com.github.yuri6037.sje2d.Application;
+import com.github.yuri6037.sje2d.render.Point;
 import com.github.yuri6037.sje2d.render.Render;
+import com.github.yuri6037.sje2d.render.Size;
 import com.github.yuri6037.sje2d.ui.asset.Layout;
 import com.github.yuri6037.sje2d.ui.core.input.IInput;
 import com.github.yuri6037.sje2d.ui.core.input.SimpleInput;
@@ -59,7 +61,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
     public SimpleLayoutManager(final Application app, final Render render) {
         this.render = new SimpleRender(app.getAssets(), app.getWindow(), render);
         this.app = app;
-        contentPanel = (BasePanel) new Panel().setProportional(true).setPos(0, 0);
+        contentPanel = (BasePanel) new Panel().setProportional(true).setPos(Point.ZERO);
     }
 
     /**
@@ -69,7 +71,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
     public SimpleLayoutManager(final Application app) {
         render = new SimpleRender(app.getAssets(), app.getWindow(), new Render());
         this.app = app;
-        contentPanel = (BasePanel) new Panel().setProportional(true).setPos(0, 0);
+        contentPanel = (BasePanel) new Panel().setProportional(true).setPos(Point.ZERO);
     }
 
     /**
@@ -94,7 +96,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * @param height the height of the rendering target.
      */
     public void update(final float width, final float height) {
-        contentPanel.setSize(width, height);
+        contentPanel.setSize(new Size(width, height));
         contentPanel.update(render, input);
         input.clear();
     }

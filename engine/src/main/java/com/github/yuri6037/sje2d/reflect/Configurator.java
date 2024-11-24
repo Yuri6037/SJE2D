@@ -31,6 +31,8 @@
 package com.github.yuri6037.sje2d.reflect;
 
 import com.github.yuri6037.sje2d.render.Color;
+import com.github.yuri6037.sje2d.render.Point;
+import com.github.yuri6037.sje2d.render.Size;
 
 import java.util.HashMap;
 
@@ -116,6 +118,18 @@ public final class Configurator implements IConfigurable {
                 vals[i] = Boolean.parseBoolean(values[i]);
             }
             return vals;
+        } else if (paramType == Point.class || paramType == Size.class) {
+            String[] values = value.split(",");
+            if (values.length != 2) {
+                throw new IllegalArgumentException("Invalid number of arguments: expected 2, got " + values.length);
+            }
+            float x = Float.parseFloat(values[0]);
+            float y = Float.parseFloat(values[1]);
+            if (paramType == Point.class) {
+                return new Point(x, y);
+            } else {
+                return new Size(x, y);
+            }
         }
         return null;
     }
