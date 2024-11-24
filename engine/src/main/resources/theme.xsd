@@ -12,7 +12,7 @@
     <xs:sequence>
       <xs:element type="styleType" name="style" maxOccurs="unbounded" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute type="xs:string" name="rectangle" use="required"/>
-    <xs:attribute type="xs:string" name="text" use="required"/>
+    <xs:attribute type="xs:string" name="rectangle" use="optional"/>
+    <xs:attribute type="xs:string" name="text" use="optional"/>
   </xs:complexType>
 </xs:schema>

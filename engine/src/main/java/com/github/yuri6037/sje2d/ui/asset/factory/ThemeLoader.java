@@ -65,8 +65,12 @@ public final class ThemeLoader extends AsyncLoader<Theme> {
         JAXBContext ctx = JAXBContext.newInstance(ThemeType.class);
         ThemeType xml = ctx.createUnmarshaller().unmarshal(new StreamSource(stream), ThemeType.class).getValue();
         theme = new Theme();
-        theme.setRectangleStyle(awaitAsset(RectangleStyle.class, xml.getRectangle()));
-        theme.setTextStyle(awaitAsset(TextStyle.class, xml.getText()));
+        if (xml.getRectangle() != null) {
+            theme.setRectangleStyle(awaitAsset(RectangleStyle.class, xml.getRectangle()));
+        }
+        if (xml.getText() != null) {
+            theme.setTextStyle(awaitAsset(TextStyle.class, xml.getText()));
+        }
         if (xml.getStyle() != null) {
             for (StyleType ty: xml.getStyle()) {
                 String keyName = ty.getKey();
