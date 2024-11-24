@@ -55,10 +55,18 @@ public class SimpleLayoutManager implements ILayoutManager {
     /**
      * Creates a new instance of SimpleLayoutManager.
      * @param app an instance of the main application (the base SJE2D Render will be extracted from this app instance).
+     * @param render an instance of the core SJE2D render engine.
      */
-    public SimpleLayoutManager(final Application app) {
-        render = new SimpleRender(app.getAssets(), app.getWindow(), new Render());
+    public SimpleLayoutManager(final Application app, final Render render) {
+        this.render = new SimpleRender(app.getAssets(), app.getWindow(), render);
         contentPanel = (BasePanel) new Panel().setProportional(true).setPos(Point.ZERO);
+    }
+
+    /**
+     * @return the content panel that stores all components and layouts.
+     */
+    public final BasePanel getContentPanel() {
+        return contentPanel;
     }
 
     /**
