@@ -45,6 +45,8 @@ import com.github.yuri6037.sje2d.ui.core.render.IRender;
 import com.github.yuri6037.sje2d.ui.core.render.Rect;
 import com.github.yuri6037.sje2d.ui.core.render.primitive.Rectangle;
 
+import java.util.Map;
+
 @Reflect
 public final class ScrollView extends Component implements IPanel {
     /**
@@ -169,5 +171,12 @@ public final class ScrollView extends Component implements IPanel {
         if (scrollbar.getStyle() == null) {
             setScrollbarStyle(theme.getStyle(CompositeStyle.class, THEME_KEY));
         }
+    }
+
+    @Override
+    public Component instantiate(final Map<String, Component> componentsById) throws CloneNotSupportedException {
+        ScrollView clone = (ScrollView) super.instantiate(componentsById);
+        clone.inner = inner.instantiate(componentsById);
+        return clone;
     }
 }
