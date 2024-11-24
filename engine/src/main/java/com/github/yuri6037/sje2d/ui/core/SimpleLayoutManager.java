@@ -46,23 +46,11 @@ import com.github.yuri6037.sje2d.window.IInputHandler;
 /**
  * A simple LayoutManager which maps to the base Render, FontRender and the base input system of SJE2D.
  */
-public final class SimpleLayoutManager implements ILayoutManager {
+public class SimpleLayoutManager implements ILayoutManager {
     private final SimpleInput input = new SimpleInput();
     private final SimpleRender render;
-    private final Application app;
 
     private final BasePanel contentPanel;
-
-    /**
-     * Creates a new instance of SimpleLayoutManager.
-     * @param app an instance of the main application.
-     * @param render an instance of the base SJE2D Render.
-     */
-    public SimpleLayoutManager(final Application app, final Render render) {
-        this.render = new SimpleRender(app.getAssets(), app.getWindow(), render);
-        this.app = app;
-        contentPanel = (BasePanel) new Panel().setProportional(true).setPos(Point.ZERO);
-    }
 
     /**
      * Creates a new instance of SimpleLayoutManager.
@@ -70,7 +58,6 @@ public final class SimpleLayoutManager implements ILayoutManager {
      */
     public SimpleLayoutManager(final Application app) {
         render = new SimpleRender(app.getAssets(), app.getWindow(), new Render());
-        this.app = app;
         contentPanel = (BasePanel) new Panel().setProportional(true).setPos(Point.ZERO);
     }
 
@@ -78,7 +65,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * Adds the given layout to the content panel.
      * @param layout the layout to add to the content panel.
      */
-    public void addLayout(final Layout layout) {
+    public final void addLayout(final Layout layout) {
         contentPanel.add(layout.getRootComponent());
     }
 
@@ -86,7 +73,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * Removes the given layout from the content panel.
      * @param layout the layout to remove from the content panel.
      */
-    public void removeLayout(final Layout layout) {
+    public final void removeLayout(final Layout layout) {
         contentPanel.remove(layout.getRootComponent());
     }
 
@@ -106,7 +93,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * input events.
      * It is the responsibility of the caller to ensure the IInputHandler is correctly restored.
      */
-    public IInputHandler getInputHandler() {
+    public final IInputHandler getInputHandler() {
         return input;
     }
 
@@ -114,7 +101,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * @return an instance of the UI Render Engine used by this LayoutManager.
      */
     @Override
-    public IRender getRender() {
+    public final IRender getRender() {
         return render;
     }
 
@@ -122,7 +109,7 @@ public final class SimpleLayoutManager implements ILayoutManager {
      * @return an instance of the UI Input Engine used by this LayoutManager.
      */
     @Override
-    public IInput getInput() {
+    public final IInput getInput() {
         return input;
     }
 }
