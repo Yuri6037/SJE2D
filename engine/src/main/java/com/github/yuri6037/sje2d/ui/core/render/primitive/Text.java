@@ -48,7 +48,6 @@ import java.io.UnsupportedEncodingException;
 public class Text {
     private static final Logger LOGGER = LoggerFactory.getLogger(Text.class);
 
-    private UTF32Str text;
     private TextStyle style;
     private Color color;
     private Font font;
@@ -58,13 +57,6 @@ public class Text {
      */
     public Color getColor() {
         return color;
-    }
-
-    /**
-     * @return the text to be rendered.
-     */
-    public UTF32Str getText() {
-        return text;
     }
 
     /**
@@ -90,14 +82,6 @@ public class Text {
     }
 
     /**
-     * Sets the UTF-32 text of this primitive.
-     * @param text the new text.
-     */
-    public final void setText(final UTF32Str text) {
-        this.text = text;
-    }
-
-    /**
      * Sets the color of this primitive.
      * @param color the new color.
      */
@@ -114,15 +98,25 @@ public class Text {
     }
 
     /**
-     * Sets the text of this primitive after converting it to UTF-32.
-     * @param text the new text.
+     * Converts a UTF32Str into a format usable by a text primitive.
+     * @param text the input UTF32Str to convert.
+     * @return the converted UTF32Str to be passed to the text primitive size or rendering operations.
      */
-    public final void setText(final String text) {
+    public static UTF32Str convert(final UTF32Str text) {
+        return text;
+    }
+
+    /**
+     * Converts a standard Java String into a format usable by a text primitive.
+     * @param text the input String to convert.
+     * @return the converted UTF32Str to be passed to the text primitive size or rendering operations.
+     */
+    public static UTF32Str convert(final String text) {
         try {
-            this.text = new UTF32Str(text);
+            return new UTF32Str(text);
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("Failed to get UTF-32 from string", e);
-            this.text = null;
+            return null;
         }
     }
 
@@ -130,9 +124,10 @@ public class Text {
      * Draws this primitive matching the requested style.
      * @param render an instance of the UI rendering engine.
      * @param pos the position of the text.
+     * @param text the text to be rendered.
      */
-    public final void draw(final IRender render, final Point pos) {
-        draw(render, pos.x(), pos.y());
+    public final void draw(final IRender render, final Point pos, final UTF32Str text) {
+        draw(render, pos.x(), pos.y(), text);
     }
 
     /**
@@ -140,8 +135,9 @@ public class Text {
      * @param render an instance of the UI rendering engine.
      * @param x the X coordinate of the text.
      * @param y the Y coordinate of the text.
+     * @param text the text to be rendered.
      */
-    public void draw(final IRender render, final float x, final float y) {
+    public void draw(final IRender render, final float x, final float y, final UTF32Str text) {
         if (text == null) {
             return;
         }
@@ -153,9 +149,10 @@ public class Text {
     /**
      * Computes the size of this text primitive matching the requested style.
      * @param render an instance of the UI rendering engine.
+     * @param text the text to be rendered.
      * @return the size of the text.
      */
-    public final Size getSze(final IRender render) {
+    public final Size getSze(final IRender render, final UTF32Str text) {
         if (text == null) {
             return Size.ZERO;
         }

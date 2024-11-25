@@ -39,12 +39,14 @@ import com.github.yuri6037.sje2d.ui.asset.style.TextStyle;
 import com.github.yuri6037.sje2d.ui.core.input.IInput;
 import com.github.yuri6037.sje2d.ui.core.render.IRender;
 import com.github.yuri6037.sje2d.ui.core.render.Rect;
+import com.github.yuri6037.sje2d.ui.core.render.primitive.Text;
 import com.github.yuri6037.sje2d.ui.core.render.primitive.Text3D;
 import com.github.yuri6037.sje2d.util.UTF32Str;
 
 @Reflect
 public final class Label3D extends Component {
     private final Text3D text = new Text3D();
+    private UTF32Str data;
 
     /**
      * Creates a new Label3D component.
@@ -94,7 +96,7 @@ public final class Label3D extends Component {
      * @return this for chaining operations.
      */
     public Label3D setText(final UTF32Str text1) {
-        this.text.setText(text1);
+        data = Text.convert(text1);
         return this;
     }
 
@@ -104,7 +106,7 @@ public final class Label3D extends Component {
      * @return this for chaining operations.
      */
     public Label3D setText(final String text1) {
-        this.text.setText(text1);
+        data = Text.convert(text1);
         return this;
     }
 
@@ -131,9 +133,9 @@ public final class Label3D extends Component {
     @Override
     public void update(final Rect parentRect, final IRender render, final IInput input, final Rect rect) {
         super.update(parentRect, render, input, rect);
-        text.draw(render, rect.getPos());
+        text.draw(render, rect.getPos(), data);
         if (shouldAutoSize()) {
-            Size textSize = text.getSze(render);
+            Size textSize = text.getSze(render, data);
             applyAutoSize(parentRect, textSize.width() + text.getOffset(), textSize.height() + text.getOffset());
         }
     }

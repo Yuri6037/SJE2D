@@ -32,6 +32,7 @@ package com.github.yuri6037.sje2d.ui.core.render.primitive;
 
 import com.github.yuri6037.sje2d.render.Color;
 import com.github.yuri6037.sje2d.ui.core.render.IRender;
+import com.github.yuri6037.sje2d.util.UTF32Str;
 
 /**
  * A 3D text primitive with a shadow.
@@ -68,16 +69,17 @@ public final class Text3D extends Text {
      * @param render an instance of the UI rendering engine.
      * @param x the X coordinate of the text.
      * @param y the Y coordinate of the text.
+     * @param text the text to be rendered.
      */
     @Override
-    public void draw(final IRender render, final float x, final float y) {
-        if (getText() == null) {
+    public void draw(final IRender render, final float x, final float y, final UTF32Str text) {
+        if (text == null) {
             return;
         }
         render.setFont(getFont() != null ? getFont() : getStyle().getFont());
         render.setColor(getColor() != null ? getColor() : getStyle().getColor());
         render.set3DOffset(offset);
         render.setShadowColor(shadowColor);
-        render.draw3DText(getText(), x, y);
+        render.draw3DText(text, x, y);
     }
 }

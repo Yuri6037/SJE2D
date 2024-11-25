@@ -56,6 +56,7 @@ public final class Button extends Component {
     private final Rectangle hover = new Rectangle();
     private final Rectangle pressed = new Rectangle();
     private final Text text = new Text();
+    private UTF32Str caption;
 
     /**
      * Creates a new Button component.
@@ -94,7 +95,7 @@ public final class Button extends Component {
      * @return this for chaining operations.
      */
     public Button setText(final UTF32Str text1) {
-        this.text.setText(text1);
+        caption = Text.convert(text1);
         return this;
     }
 
@@ -104,7 +105,7 @@ public final class Button extends Component {
      * @return this for chaining operations.
      */
     public Button setText(final String text1) {
-        this.text.setText(text1);
+        caption = Text.convert(text1);
         return this;
     }
 
@@ -123,10 +124,10 @@ public final class Button extends Component {
         } else {
             normal.draw(render, rect.getPos(), rect.getSize());
         }
-        Size textSize = text.getSze(render);
+        Size textSize = text.getSze(render, caption);
         float posx = rect.getPos().x() + rect.getSize().width() / 2f - textSize.width() / 2f;
         float posy = rect.getPos().y() + rect.getSize().height() / 2f - textSize.height() / 2f;
-        text.draw(render, posx, posy);
+        text.draw(render, posx, posy, caption);
         applyAutoSize(parentRect, textSize.width(), textSize.height());
     }
 

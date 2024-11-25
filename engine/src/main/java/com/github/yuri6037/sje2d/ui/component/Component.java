@@ -46,7 +46,7 @@ import java.util.Map;
  * This is the base class for all types of components in the UI engine.
  */
 public abstract class Component implements IComponent, IConfigurable, Cloneable {
-    private final Rect rect = new Rect();
+    private Rect rect = new Rect();
     private boolean autoSize = false;
     private boolean showDebugBoundingBox = false;
     private final Configurator configurator = new Configurator();
@@ -259,6 +259,9 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
         if (id != null) {
             componentsById.put(id, obj);
         }
+        obj.rect = new Rect();
+        obj.rect.setPos(rect.getPos());
+        obj.rect.setSize(rect.getSize());
         return obj;
     }
 }

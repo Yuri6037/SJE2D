@@ -45,6 +45,7 @@ import com.github.yuri6037.sje2d.util.UTF32Str;
 @Reflect
 public final class Label extends Component {
     private final Text text = new Text();
+    private UTF32Str data;
 
     /**
      * Creates a new Label component.
@@ -92,7 +93,7 @@ public final class Label extends Component {
      * @return this for chaining operations.
      */
     public Label setText(final UTF32Str text1) {
-        this.text.setText(text1);
+        data = Text.convert(text1);
         return this;
     }
 
@@ -102,16 +103,16 @@ public final class Label extends Component {
      * @return this for chaining operations.
      */
     public Label setText(final String text1) {
-        this.text.setText(text1);
+        data = Text.convert(text1);
         return this;
     }
 
     @Override
     public void update(final Rect parentRect, final IRender render, final IInput input, final Rect rect) {
         super.update(parentRect, render, input, rect);
-        text.draw(render, rect.getPos());
+        text.draw(render, rect.getPos(), data);
         if (shouldAutoSize()) {
-            Size textSize = text.getSze(render);
+            Size textSize = text.getSze(render, data);
             applyAutoSize(parentRect, textSize.width(), textSize.height());
         }
     }
