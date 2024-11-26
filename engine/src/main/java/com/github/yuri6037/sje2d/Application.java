@@ -237,6 +237,13 @@ public class Application {
         return config;
     }
 
+    /**
+     * Requests exit of this application.
+     */
+    public final void quit() {
+        getWindow().requestClose();
+    }
+
     //CHECKSTYLE OFF: HiddenField
     /**
      * Initializes a new Application. This is the main entry point for SJE2D, call this function from your main
