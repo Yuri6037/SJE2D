@@ -112,10 +112,20 @@ public abstract class BasePanel extends Component implements IPanel {
         update(null, render, input, getRect());
     }
 
+    /**
+     * Updates and renders this component. This default method implementation provides the necessary support to render
+     * the debug bounding box and the background. You should always call this method in derived classes if you want
+     * the debug bounding box and/or the background functions.
+     * @param parentRect the parent rectangle in pixels if this object is proportional relative to its parent.
+     *                   This is used for auto-sizing.
+     * @param render an instance of the UI rendering engine.
+     * @param input an instance of the UI input engine.
+     * @param rect the rectangle in pixels in which this component should be rendered.
+     */
     @Override
-    public void update(Rect parentRect, IRender render, IInput input, Rect rect) {
+    public void update(final Rect parentRect, final IRender render, final IInput input, final Rect rect) {
         if (background.getStyle() != null) {
-            background.draw(render, getPos(), getSize());
+            background.draw(render, rect.getPos(), rect.getSize());
         }
         super.update(parentRect, render, input, rect);
     }
