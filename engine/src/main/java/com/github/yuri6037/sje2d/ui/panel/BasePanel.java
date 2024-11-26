@@ -35,6 +35,7 @@ import com.github.yuri6037.sje2d.ui.asset.style.RectangleStyle;
 import com.github.yuri6037.sje2d.ui.component.Component;
 import com.github.yuri6037.sje2d.ui.core.input.IInput;
 import com.github.yuri6037.sje2d.ui.core.render.IRender;
+import com.github.yuri6037.sje2d.ui.core.render.Rect;
 import com.github.yuri6037.sje2d.ui.core.render.primitive.Rectangle;
 
 import java.util.ArrayList;
@@ -108,10 +109,15 @@ public abstract class BasePanel extends Component implements IPanel {
      * @param input an instance of the UI input engine.
      */
     public final void update(final IRender render, final IInput input) {
+        update(null, render, input, getRect());
+    }
+
+    @Override
+    public void update(Rect parentRect, IRender render, IInput input, Rect rect) {
         if (background.getStyle() != null) {
             background.draw(render, getPos(), getSize());
         }
-        update(null, render, input, getRect());
+        super.update(parentRect, render, input, rect);
     }
 
     /**
