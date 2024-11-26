@@ -61,6 +61,7 @@ public final class ClassRegistry {
             return;
         }
         classes.put(cl.getSimpleName(), cl);
+        LOGGER.info("Added class for reflection: {}", cl.getName());
     }
 
     /**
@@ -69,6 +70,7 @@ public final class ClassRegistry {
      */
     public void addSearchPath(final String path) {
         searchPaths.add(path);
+        LOGGER.info("Added search path for reflection: {}", path);
     }
 
     /**
