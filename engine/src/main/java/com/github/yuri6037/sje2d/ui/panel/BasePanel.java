@@ -31,9 +31,11 @@
 package com.github.yuri6037.sje2d.ui.panel;
 
 import com.github.yuri6037.sje2d.ui.asset.Theme;
+import com.github.yuri6037.sje2d.ui.asset.style.RectangleStyle;
 import com.github.yuri6037.sje2d.ui.component.Component;
 import com.github.yuri6037.sje2d.ui.core.input.IInput;
 import com.github.yuri6037.sje2d.ui.core.render.IRender;
+import com.github.yuri6037.sje2d.ui.core.render.primitive.Rectangle;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -44,12 +46,14 @@ import java.util.Map;
 public abstract class BasePanel extends Component implements IPanel {
     private ArrayList<Component> components = new ArrayList<>();
     private boolean proportional = false;
+    private final Rectangle background = new Rectangle();
 
     /**
      * Creates a new instance of a BasePanel.
      */
     public BasePanel() {
         addParam("proportional", Boolean.class, this::setProportional);
+        addParam("background", RectangleStyle.class, this::setBackground);
     }
 
     /**
@@ -66,6 +70,16 @@ public abstract class BasePanel extends Component implements IPanel {
      */
     public final BasePanel setProportional(final boolean proportional1) {
         this.proportional = proportional1;
+        return this;
+    }
+
+    /**
+     * Sets a background to render in this panel.
+     * @param style the style of the rectangle to be rendered.
+     * @return this for chaining operations.
+     */
+    public final BasePanel setBackground(final RectangleStyle style) {
+        background.setStyle(style);
         return this;
     }
 
@@ -94,6 +108,9 @@ public abstract class BasePanel extends Component implements IPanel {
      * @param input an instance of the UI input engine.
      */
     public final void update(final IRender render, final IInput input) {
+        if (background.getStyle() != null) {
+            background.draw(render, getPos(), getSize());
+        }
         update(null, render, input, getRect());
     }
 
