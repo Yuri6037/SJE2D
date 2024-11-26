@@ -57,7 +57,7 @@ public final class ClassRegistry {
      */
     public void add(final Class<? extends IConfigurable> cl) {
         if (cl.getAnnotation(Reflect.class) == null) {
-            LOGGER.error("Not adding class {}: class is not Layout aware", cl);
+            LOGGER.error("Not adding class {}: class is not reflection aware", cl);
             return;
         }
         classes.put(cl.getSimpleName(), cl);
