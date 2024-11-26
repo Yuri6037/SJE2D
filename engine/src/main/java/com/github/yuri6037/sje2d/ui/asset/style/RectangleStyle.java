@@ -43,6 +43,7 @@ public final class RectangleStyle extends Style {
     private Color borderColor;
     private Texture borderTexture;
     private float borderSize;
+    private float borderRadius = -1f;
 
     /**
      * Creates a new instance of a RectangleStyle.
@@ -54,6 +55,7 @@ public final class RectangleStyle extends Style {
         addParam("borderColor", Color.class, this::setBorderColor);
         addParam("borderTexture", Texture.class, this::setBorderTexture);
         addParam("borderSize", Float.class, this::setBorderSize);
+        addParam("borderRadius", Float.class, this::setBorderRadius);
     }
 
     /**
@@ -73,6 +75,16 @@ public final class RectangleStyle extends Style {
      */
     public RectangleStyle setTexture(final Texture texture1) {
         texture = texture1;
+        return this;
+    }
+
+    /**
+     * Sets the border radius of this rectangle. A radius less or equal to 0 will disable the rounded rectangle.
+     * @param radius the new border radius for this rectangle.
+     * @return this for chaining operations.
+     */
+    public RectangleStyle setBorderRadius(final float radius) {
+        borderRadius = radius;
         return this;
     }
 
@@ -156,5 +168,12 @@ public final class RectangleStyle extends Style {
      */
     public boolean hasBorder() {
         return hasBorder;
+    }
+
+    /**
+     * @return the border radius to apply when rendering a rectangle matching this style.
+     */
+    public float getBorderRadius() {
+        return borderRadius;
     }
 }

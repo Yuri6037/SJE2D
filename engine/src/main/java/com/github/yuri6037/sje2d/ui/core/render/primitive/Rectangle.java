@@ -77,7 +77,11 @@ public final class Rectangle {
     public void draw(final IRender render, final float x, final float y, final float width, final float height) {
         render.setColor(style.getColor());
         render.setTexture(style.getTexture());
-        render.drawRect(x, y, width, height);
+        if (style.getBorderRadius() > 0) {
+            render.drawRoundedRect(x, y, width, height, style.getBorderRadius());
+        } else {
+            render.drawRect(x, y, width, height);
+        }
         if (style.hasBorder()) {
             render.setColor(style.getBorderColor());
             render.setTexture(style.getBorderTexture());
