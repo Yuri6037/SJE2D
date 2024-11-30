@@ -49,4 +49,13 @@ public record BoundingBox(Vector start, Vector end) {
     public boolean isIn(final BoundingBox other) {
         return start.ge(other.start) && end.le(other.end);
     }
+
+    /**
+     * Checks if the given vector is in this bounding box.
+     * @param other the other operand.
+     * @return true if other is contained in this, false otherwise.
+     */
+    public boolean contains(final Vector other) {
+        return other.ge(start) && other.le(end);
+    }
 }
