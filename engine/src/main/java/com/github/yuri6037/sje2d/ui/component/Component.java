@@ -36,9 +36,11 @@ import com.github.yuri6037.sje2d.reflect.IConfigurable;
 import com.github.yuri6037.sje2d.render.Color;
 import com.github.yuri6037.sje2d.render.Point;
 import com.github.yuri6037.sje2d.render.Size;
+import com.github.yuri6037.sje2d.ui.asset.style.RectangleStyle;
 import com.github.yuri6037.sje2d.ui.core.input.IInput;
 import com.github.yuri6037.sje2d.ui.core.render.IRender;
 import com.github.yuri6037.sje2d.ui.core.render.Rect;
+import com.github.yuri6037.sje2d.ui.core.render.primitive.Rectangle;
 
 import java.util.Map;
 
@@ -51,6 +53,7 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
     private boolean showDebugBoundingBox = false;
     private final Configurator configurator = new Configurator();
     private String id;
+    private final Rectangle background = new Rectangle();
 
     /**
      * Initialize a base Component.
@@ -60,6 +63,17 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
         addParam("autoSize", Boolean.class, this::setAutoSize);
         addParam("pos", Point.class, this::setPos);
         addParam("size", Size.class, this::setSize);
+        addParam("background", RectangleStyle.class, this::setBackground);
+    }
+
+    /**
+     * Sets a background to render in this panel.
+     * @param style the style of the rectangle to be rendered.
+     * @return this for chaining operations.
+     */
+    public final Component setBackground(final RectangleStyle style) {
+        background.setStyle(style);
+        return this;
     }
 
     /**
@@ -212,8 +226,8 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
     //CHECKSTYLE OFF: HiddenField
     /**
      * Updates and renders this component. This default method implementation provides the necessary support to render
-     * the debug bounding box. You should always call this method in derived classes if you want the debug bounding box
-     * function.
+     * the debug bounding box and the background. You should always call this method in derived classes if you want the
+     * debug bounding box and/or the background functions.
      * @param parentRect the parent rectangle in pixels if this object is proportional relative to its parent.
      *                   This is used for auto-sizing.
      * @param render an instance of the UI rendering engine.
@@ -222,6 +236,9 @@ public abstract class Component implements IComponent, IConfigurable, Cloneable 
      */
     @Override
     public void update(final Rect parentRect, final IRender render, final IInput input, final Rect rect) {
+        if (background.getStyle() != null) {
+            background.draw(render, rect.getPos(), rect.getSize());
+        }
         applyDebugBoundingBox(render, rect);
     }
     //CHECKSTYLE ON
